@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Import style sheets -->
+        <link rel="stylesheet" type="text/css" href="css/sdpi.css">
+        <!-- Import scripts -->
+        <script src="js/main.js"></script>
+        <script src="js/csi.js"></script>
+        <script src="js/toggleHide.js"></script>
+        <title>com.f10dev.unity</title>
+    </head>
+    <body>
+        <!-- Property Inspector -->
+        <div class="sdpi-wrapper" id="pi">
+            <!-- Group toggle, ID + info -->
+            <div data-include="templates/groupToggle.html"></div>
+            <!-- Method ID -->
+            <div data-include="templates/idField.html"></div>
+            <!-- Param toggle + type -->
+            <div class="sdpi-item" type="checkbox">
+                <div class="sdpi-item-label empty"></div>
+                <input class="sdpi-item-value" id="param" type="checkbox" value="true" onchange="updateToggle('param', 'value');updateToggle('param', 'type', false)">
+                <label for="param"><span></span>Parameter</label>
+                <div data-include="templates/typeDropdown.html"></div>
+            </div>
+            <!-- Param Value -->
+            <div data-include="templates/valueField.html"></div>
+            <!-- Help Button -->
+            <div data-include="templates/helpButton.html"></div>
+        </div>
+    </body>
+
+    <script>updateToggleDelayed('group', 'group-id');</script>
+    <script>updateToggleDelayed('param', 'value');updateToggleDelayed('param', 'type', false)</script>
+</html>

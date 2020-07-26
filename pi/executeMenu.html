@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Import style sheets -->
+        <link rel="stylesheet" type="text/css" href="css/sdpi.css">
+        <!-- Import scripts -->
+        <script src="js/main.js"></script>
+        <script src="js/csi.js"></script>
+        <title>com.f10dev.unity</title>
+    </head>
+    <body>
+        <!-- Property Inspector -->
+        <div class="sdpi-wrapper" id="pi">
+            <!-- Menu Item Path -->
+            <div class="sdpi-item" type="textarea">
+                <div class="sdpi-item-label">Path</div>
+                <textarea class="sdpi-item-value" id="path" rows="2" placeholder="For example: GameObject/3D Object/Cube" required></textarea>
+            </div>
+            <!-- Info -->
+            <div class="sdpi-item" type="message">
+                <details class="message info">
+                    <summary>Write the full path, spaces included.<br>Any menu item, built-in or custom is supported.</summary>
+                </details>
+            </div>
+            <!-- Help Button -->
+            <div data-include="templates/helpButton.html"></div>
+        </div>
+    </body>
+</html>
