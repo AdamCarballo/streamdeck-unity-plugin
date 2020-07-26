@@ -1,0 +1,83 @@
+{
+  "Actions": [
+    {
+      "Icon": "plugin/images/actions/NOTHING",
+      "Name": "Invoke Method",
+      "States": [
+        {
+          "Image": "plugin/images/icons/NOTHING"
+        }
+      ],
+      "Tooltip": "",
+      "PropertyInspectorPath": "pi/invokeMethod.html",
+      "UUID": "com.f10dev.unity.invoke-method"
+    },
+    {
+      "Icon": "plugin/images/actions/NOTHING",
+      "Name": "Set Field / Property",
+      "States": [
+        {
+          "Image": "plugin/images/icons/NOTHING"
+        }
+      ],
+      "Tooltip": "",
+      "PropertyInspectorPath": "pi/setFieldProperty.html",
+      "UUID": "com.f10dev.unity.set-field-property"
+    },
+    {
+      "Icon": "plugin/images/actions/power",
+      "Name": "Play Mode",
+      "States": [
+        {
+          "Image": "plugin/images/icons/play_off",
+          "Name": "Stopped"
+        },
+        {
+          "Image": "plugin/images/icons/play_on",
+          "Name": "Playing"
+        }
+      ],
+      "Tooltip": "",
+      "PropertyInspectorPath": "pi/playMode.html",
+      "UUID": "com.f10dev.unity.play-mode"
+    },
+    {
+      "Icon": "plugin/images/actions/NOTHING",
+      "Name": "Execute Menu",
+      "States": [
+        {
+          "Image": "plugin/images/icons/NOTHING"
+        }
+      ],
+      "Tooltip": "",
+      "PropertyInspectorPath": "pi/executeMenu.html",
+      "UUID": "com.f10dev.unity.execute-menu"
+    }
+  ],
+  "SDKVersion": 2,
+  "Author": "f10dev",
+  "CodePath": "test.bat",
+  "Description": "Description.",
+  "Name": "Unity",
+  "Icon": "plugin/images/icons/plugin",
+  "Category": "Unity",
+  "CategoryIcon": "plugin/images/actions/category",
+  "PropertyInspectorPath": "pi/index.html",
+  "URL": "https://www.elgato.com/gaming/stream-deck",
+  "Version": "1.0.0",
+  "DefaultWindowSize": [500, 650],
+  "OS": [
+    {
+        "Platform": "mac",
+        "MinimumVersion" : "10.11"
+    },
+    {
+        "Platform": "windows",
+        "MinimumVersion" : "10"
+    }
+  ],
+  "Software":
+    {
+        "MinimumVersion" : "4.2"
+    }
+}
