@@ -1,11 +1,11 @@
 {
   "Actions": [
     {
-      "Icon": "plugin/images/actions/NOTHING",
+      "Icon": "plugin/images/actions/invoke",
       "Name": "Invoke Method",
       "States": [
         {
-          "Image": "plugin/images/icons/NOTHING"
+          "Image": "plugin/images/icons/invoke"
         }
       ],
       "Tooltip": "",
@@ -13,11 +13,11 @@
       "UUID": "com.f10dev.unity.invoke-method"
     },
     {
-      "Icon": "plugin/images/actions/NOTHING",
+      "Icon": "plugin/images/actions/set",
       "Name": "Set Field / Property",
       "States": [
         {
-          "Image": "plugin/images/icons/NOTHING"
+          "Image": "plugin/images/icons/set"
         }
       ],
       "Tooltip": "",
@@ -25,7 +25,7 @@
       "UUID": "com.f10dev.unity.set-field-property"
     },
     {
-      "Icon": "plugin/images/actions/power",
+      "Icon": "plugin/images/actions/play",
       "Name": "Play Mode",
       "States": [
         {
@@ -42,11 +42,11 @@
       "UUID": "com.f10dev.unity.play-mode"
     },
     {
-      "Icon": "plugin/images/actions/NOTHING",
+      "Icon": "plugin/images/actions/execute",
       "Name": "Execute Menu",
       "States": [
         {
-          "Image": "plugin/images/icons/NOTHING"
+          "Image": "plugin/images/icons/execute"
         }
       ],
       "Tooltip": "",
