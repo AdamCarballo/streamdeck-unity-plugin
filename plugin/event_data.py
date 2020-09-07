@@ -12,6 +12,7 @@ class EventData:
 
 		data_payload = data.get("payload")
 
-		self.settings = data_payload.get("settings")
-		self.coordinates = data_payload.get("coordinates")
-		self.state = data_payload.get("state", 0)
+		if data_payload is not None:
+			self.settings = data_payload.get("settings")
+			self.coordinates = data_payload.get("coordinates")
+			self.state = data_payload.get("state", 0)

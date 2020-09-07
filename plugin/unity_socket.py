@@ -44,7 +44,7 @@ class UnityWebSocket:
 		self.server.send_message_to_all(json.dumps(data))
 		return True
 
-	def event_default(self):
+	def event_default(self, data):
 		pass
 
 
