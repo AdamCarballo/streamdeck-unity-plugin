@@ -11,6 +11,7 @@ class UnityWebSocket:
 		self.server.set_fn_message_received(self.on_message)
 
 		self.on_play_mode_state_changed = self.event_default
+		self.on_pause_mode_state_changed = self.event_default
 		self.on_set_state = self.event_default
 
 	def start(self):
@@ -25,7 +26,8 @@ class UnityWebSocket:
 
 		{
 			"setState": self.on_set_state,
-			"playModeStateChanged": self.on_play_mode_state_changed
+			"playModeStateChanged": self.on_play_mode_state_changed,
+			"pauseModeStateChanged": self.on_pause_mode_state_changed
 		}.get(data.event, self.event_default)(data)
 
 	def send(self, action, context=None, settings=None, state=0):

@@ -54,8 +54,24 @@ class PlayModeAction(Action):
 		super().set_state(state)
 		self.state_changed = True
 
+
 # endregion
 
+# region Pause Mode
+class PauseModeAction(Action):
+	def get_action_name(self):
+		return "pause-mode"
+
+	def on_key_down(self, state):
+		super().on_key_down(state)
+		self.state_changed = False
+
+	def set_state(self, state):
+		super().set_state(state)
+		self.state_changed = True
+
+
+# endregion
 
 # region Set Field Property
 class ExecuteMenu(Action):

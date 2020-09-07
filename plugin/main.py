@@ -14,7 +14,7 @@ import websocket
 from threading import Thread
 import json
 import unity_socket
-from actions import InvokeMethodAction, SetFieldPropertyAction, PlayModeAction, ExecuteMenu
+from actions import InvokeMethodAction, SetFieldPropertyAction, PlayModeAction, PauseModeAction, ExecuteMenu
 from event_data import EventData
 
 
@@ -44,6 +44,7 @@ def on_message(ws, message):
 			get_action_name("invoke-method"): InvokeMethodAction,
 			get_action_name("set-field-property"): SetFieldPropertyAction,
 			get_action_name("play-mode"): PlayModeAction,
+			get_action_name("pause-mode"): PauseModeAction,
 			get_action_name("execute-menu"): ExecuteMenu
 		}
 
@@ -124,6 +125,7 @@ def create_unity_socket():
 	global u_socket
 	u_socket = unity_socket.UnityWebSocket(UNITY_PORT)
 	u_socket.on_play_mode_state_changed = lambda data: set_state_all_actions(PlayModeAction, data.payload["state"])
+	u_socket.on_pause_mode_state_changed = lambda data: set_state_all_actions(PauseModeAction, data.payload["state"])
 	u_socket.on_set_state = lambda data: set_state(data.context, data.payload["state"])
 	u_socket.start()
 

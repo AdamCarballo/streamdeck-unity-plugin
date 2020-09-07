@@ -42,6 +42,23 @@
       "UUID": "com.f10dev.unity.play-mode"
     },
     {
+      "Icon": "plugin/images/actions/play",
+      "Name": "Pause Mode",
+      "States": [
+        {
+          "Image": "plugin/images/icons/play_off",
+          "Name": "Unpaused"
+        },
+        {
+          "Image": "plugin/images/icons/play_on",
+          "Name": "Paused"
+        }
+      ],
+      "Tooltip": "",
+      "PropertyInspectorPath": "pi/pauseMode.html",
+      "UUID": "com.f10dev.unity.pause-mode"
+    },
+    {
       "Icon": "plugin/images/actions/execute",
       "Name": "Execute Menu",
       "States": [
