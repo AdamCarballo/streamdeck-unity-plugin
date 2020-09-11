@@ -1,6 +1,52 @@
 {
   "Actions": [
     {
+      "Icon": "plugin/images/actions/play",
+      "Name": "Play Mode",
+      "States": [
+        {
+          "Image": "plugin/images/icons/play_off",
+          "Name": "Stopped"
+        },
+        {
+          "Image": "plugin/images/icons/play_on",
+          "Name": "Playing"
+        }
+      ],
+      "Tooltip": "",
+      "PropertyInspectorPath": "pi/playMode.html",
+      "UUID": "com.f10dev.unity.play-mode"
+    },
+    {
+      "Icon": "plugin/images/actions/pause",
+      "Name": "Pause Mode",
+      "States": [
+        {
+          "Image": "plugin/images/icons/pause_off",
+          "Name": "Unpaused"
+        },
+        {
+          "Image": "plugin/images/icons/pause_on",
+          "Name": "Paused"
+        }
+      ],
+      "Tooltip": "",
+      "PropertyInspectorPath": "pi/pauseMode.html",
+      "UUID": "com.f10dev.unity.pause-mode"
+    },
+    {
+      "Icon": "plugin/images/actions/execute",
+      "Name": "Execute Menu",
+      "States": [
+        {
+          "Image": "plugin/images/icons/execute"
+        }
+      ],
+      "Tooltip": "",
+      "PropertyInspectorPath": "pi/executeMenu.html",
+      "UUID": "com.f10dev.unity.execute-menu"
+    },
+    {
       "Icon": "plugin/images/actions/invoke",
       "Name": "Invoke Method",
       "States": [
@@ -23,52 +69,6 @@
       "Tooltip": "",
       "PropertyInspectorPath": "pi/setFieldProperty.html",
       "UUID": "com.f10dev.unity.set-field-property"
-    },
-    {
-      "Icon": "plugin/images/actions/play",
-      "Name": "Play Mode",
-      "States": [
-        {
-          "Image": "plugin/images/icons/play_off",
-          "Name": "Stopped"
-        },
-        {
-          "Image": "plugin/images/icons/play_on",
-          "Name": "Playing"
-        }
-      ],
-      "Tooltip": "",
-      "PropertyInspectorPath": "pi/playMode.html",
-      "UUID": "com.f10dev.unity.play-mode"
-    },
-    {
-      "Icon": "plugin/images/actions/play",
-      "Name": "Pause Mode",
-      "States": [
-        {
-          "Image": "plugin/images/icons/play_off",
-          "Name": "Unpaused"
-        },
-        {
-          "Image": "plugin/images/icons/play_on",
-          "Name": "Paused"
-        }
-      ],
-      "Tooltip": "",
-      "PropertyInspectorPath": "pi/pauseMode.html",
-      "UUID": "com.f10dev.unity.pause-mode"
-    },
-    {
-      "Icon": "plugin/images/actions/execute",
-      "Name": "Execute Menu",
-      "States": [
-        {
-          "Image": "plugin/images/icons/execute"
-        }
-      ],
-      "Tooltip": "",
-      "PropertyInspectorPath": "pi/executeMenu.html",
-      "UUID": "com.f10dev.unity.execute-menu"
     }
   ],
   "SDKVersion": 2,
