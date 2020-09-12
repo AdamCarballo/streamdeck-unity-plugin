@@ -1,6 +1,8 @@
-# Python binaries
-plugin/python/
-plugin/python_32bit/
+# Allow final built EXE
+!StreamDeckUnity.exe
+
+# PyInstall build
+plugin/build/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

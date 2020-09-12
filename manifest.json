@@ -73,7 +73,7 @@
   ],
   "SDKVersion": 2,
   "Author": "f10dev",
-  "CodePath": "test.bat",
+  "CodePath": "plugin/dist/StreamDeckUnity.exe",
   "Description": "Description.",
   "Name": "Unity",
   "Icon": "plugin/images/icons/plugin",
