@@ -200,7 +200,9 @@ if __name__ == "__main__":
 	# -info [A stringified json containing the Stream Deck application information and devices information.]
 	SD_INFO = sys.argv[8]
 
-	# Open the web socket to Stream Deck
-	Thread(target=open_streamdeck_socket).start()
 	# Create Unity web socket
-	Thread(target=create_unity_socket).start()
+	Thread(target=create_unity_socket, daemon=True).start()
+
+	# Open the web socket to Stream Deck
+	# Thread(target=open_streamdeck_socket, daemon=True).start()
+	open_streamdeck_socket()
