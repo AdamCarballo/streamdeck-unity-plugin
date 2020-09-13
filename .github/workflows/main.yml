@@ -77,18 +77,15 @@ jobs:
         # uses: actions/download-artifact@v2
         # with:
           # name: artifact
-          
-      - name: Testing DIR
-        run: dir /s
         
       - name: Move result files
         run: |
-          mkdir build
-          move pi build\pi
-          move plugin\images build\plugin\images
-          move LICENSE build\LICENSE
-          move manifest.json build\manifest.json
-          move plugin\dist\StreamDeckUnity.exe build\plugin\dist\StreamDeckUnity.exe
+          mkdir artifact
+          move pi artifact\pi
+          move plugin\images artifact\plugin\images
+          move LICENSE artifact\LICENSE
+          move manifest.json artifact\manifest.json
+          move dist\StreamDeckUnity.exe artifact\plugin\dist\StreamDeckUnity.exe
       
       # Build StreamDeck plugin   
       - name: Download StreamDeck DistributionTool
@@ -105,7 +102,7 @@ jobs:
           args: unzip DistributionToolWindows.zip -d distributionTool\
           
       - name: Run DistributionTool
-        run: distributionTool\DistributionTool.exe -b -i com.f10dev.unity.sdPlugin -o build\
+        run: distributionTool\DistributionTool.exe -b -i com.f10dev.unity.sdPlugin -o artifact\
         
       - name: Testing DIR
         run: dir
