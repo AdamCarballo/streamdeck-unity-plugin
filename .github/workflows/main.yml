@@ -93,11 +93,8 @@ jobs:
         run: curl https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolWindows.zip -o DistributionToolWindows.zip
         
       - name: Extract DistributionTool
-        uses: DuckSoft/extract-7z-action@v1.0
-        with:
-          pathSource: DistributionToolWindows.zip
-          pathTarget: "${{env.GITHUB_WORKSPACE}}"
-          
+        run: python -c "exec(\"import zipfile\nwith zipfile.ZipFile('DistributionToolWindows.zip','r') as zip_ref: zip_ref.extractall()\")"
+        
       - name: Run DistributionTool
         run: DistributionTool.exe -b -i com.f10dev.unity.sdPlugin -o artifact\
         
