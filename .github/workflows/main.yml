@@ -90,17 +90,15 @@ jobs:
       
       # Build StreamDeck plugin   
       - name: Download StreamDeck DistributionTool
-        run: |
-            mkdir distributionTool
-            curl https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolWindows.zip -o DistributionToolWindows.zip
+        run: curl https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolWindows.zip -o DistributionToolWindows.zip
         
-      - name: Unzip DistributionTool
-        uses: TonyBogdanov/zip@1.0
+      - name: Extract DistributionTool
+        uses: brunoborges/justextract@v1
         with:
-          args: unzip DistributionToolWindows.zip -d distributionTool\
+          file: DistributionToolWindows.zip
           
       - name: Run DistributionTool
-        run: distributionTool\DistributionTool.exe -b -i com.f10dev.unity.sdPlugin -o artifact\
+        run: DistributionTool.exe -b -i com.f10dev.unity.sdPlugin -o artifact\
         
       - name: Testing DIR
         run: dir
