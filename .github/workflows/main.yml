@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    # branches: [ master ]
+    tags:
+      - '*'
+  # pull_request:
+    # branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Define sources
+        id: sources
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          
+      - name: Echo stuff
+        run: |
+          echo $SOURCE_NAME
+          echo $SOURCE_BRANCH
+          echo $SOURCE_TAG
+        env:
+          SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
+          SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
+          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: x64
+         
+      - name: Install dependencies
+      - uses: BSFishy/pip-action@v1
+        with:
+          requirements: requirements.txt
+
+      - name: Run PyInstaller
+        run: python -m PyInstaller -F plugin/main.spec
+          
+      - name: Compress
+        uses: papeloto/action-zip@v1
+        with:
+          files: pi/ LICENSE manifest.json plugin/dist/StreamDeckUnity.exe
+          dest: artifact.zip
+
+      - name: Create draft release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+        with:
+          tag_name: $SOURCE_TAG
+          release_name: Release Test
+          draft: true
+          prerelease: false
+
+      - name: Upload draft release
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifact.zip
+          asset_name: artifact.zip
+          asset_content_type: application/zip
+
+      - name: Publish draft release
+        uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
