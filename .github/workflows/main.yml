@@ -78,6 +78,9 @@ jobs:
         # with:
           # name: artifact
           
+      - name: Testing DIR
+        run: dir /s
+        
       - name: Move result files
         run: |
           mkdir build
