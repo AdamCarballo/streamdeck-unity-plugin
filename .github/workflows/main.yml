@@ -21,15 +21,15 @@ jobs:
           echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
           echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
           
-      - name: Echo stuff
-        run: |
-          echo $SOURCE_NAME
-          echo $SOURCE_BRANCH
-          echo $SOURCE_TAG
-        env:
-          SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
-          SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
-          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+      # - name: Echo stuff
+        # run: |
+          # echo $SOURCE_NAME
+          # echo $SOURCE_BRANCH
+          # echo $SOURCE_TAG
+        # env:
+          # SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
+          # SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
+          # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -51,7 +51,8 @@ jobs:
       - name: Compress
         uses: papeloto/action-zip@v1
         with:
-          files: pi/ LICENSE manifest.json plugin/dist/StreamDeckUnity.exe
+          files: pi/ plugin/images/ LICENSE manifest.json plugin/dist/StreamDeckUnity.exe
+          recursive: true
           dest: artifact.zip
 
       - name: Create draft release
@@ -61,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
         with:
-          tag_name: $SOURCE_TAG
+          tag_name: ${{ SOURCE_TAG }}
           release_name: Release Test
           draft: true
           prerelease: false
