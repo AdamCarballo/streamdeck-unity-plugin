@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
         with:
-          tag_name: ${{ SOURCE_TAG }}
+          tag_name: "${{env.SOURCE_TAG}}"
           release_name: Release Test
           draft: true
           prerelease: false
