@@ -76,7 +76,7 @@
   "CodePath": "plugin/dist/StreamDeckUnity.exe",
   "Description": "Description.",
   "Name": "Unity",
-  "Icon": "plugin/images/icons/plugin",
+  "Icon": "plugin/images/actions/plugin",
   "Category": "Unity",
   "CategoryIcon": "plugin/images/actions/category",
   "PropertyInspectorPath": "pi/index.html",
