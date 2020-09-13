@@ -97,9 +97,14 @@ jobs:
         
       - name: Extract DistributionTool
         run: unzip DistributionToolWindows.zip
+        
+      - name: Testing DIR
+        run: dir
             
       - name: Run DistributionTool
-        run: DistributionTool -b -i com.f10dev.unity.sdPlugin -o artifact\
+        run: |
+          mkdir release
+          DistributionTool -b -i artifact -o release\
         
       - name: Testing DIR
         run: dir
