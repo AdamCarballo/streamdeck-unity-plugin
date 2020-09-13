@@ -9,17 +9,17 @@ on:
     # branches: [ master ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-windows:
+    # runs-on: ubuntu-latest
+    runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Define sources
         id: sources
         run: |
-          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
-          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs\*\}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs\heads\}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs\tags\}
           
       # - name: Echo stuff
         # run: |
@@ -31,9 +31,10 @@ jobs:
           # SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
           # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checking-outrepository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
       
+      # Build python
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -46,40 +47,96 @@ jobs:
           requirements: requirements.txt
 
       - name: Run PyInstaller
-        run: python -m PyInstaller -F plugin/main.spec
+        run: python -m PyInstaller -F plugin\main.spec
           
-      - name: Compress
-        uses: papeloto/action-zip@v1
+      # - name: Compress artifact
+        # uses: papeloto/action-zip@v1
+        # with:
+          # files: pi/ plugin/images/ LICENSE manifest.json plugin/dist/StreamDeckUnity.exe
+          # recursive: false
+          # dest: artifact.zip
+      
+      # - name: Upload artifact
+        # uses: actions/upload-artifact@v2
+        # with:
+          # name: artifact
+          # path: artifact.zip
+          
+      # - name: Upload artifact
+        # uses: actions/upload-artifact@v2
+        # with:
+          # name: artifact
+          # path: |
+            # pi/
+            # plugin/images/
+            # LICENSE
+            # manifest.json
+            # plugin/dist/StreamDeckUnity.exe
+            
+      # - name: Download artifact
+        # uses: actions/download-artifact@v2
+        # with:
+          # name: artifact
+          
+      - name: Move result files
+        run: |
+          mkdir build
+          move pi build\pi
+          move plugin\images build\plugin\images
+          move LICENSE build\LICENSE
+          move manifest.json build\manifest.json
+          move plugin\dist\StreamDeckUnity.exe build\plugin\dist\StreamDeckUnity.exe
+      
+      # Build StreamDeck plugin   
+      - name: Download StreamDeck DistributionTool
+        uses: wei/wget@v1
         with:
-          files: pi/ plugin/images/ LICENSE manifest.json plugin/dist/StreamDeckUnity.exe
-          recursive: true
-          dest: artifact.zip
+          args: https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolWindows.zip
+          
+      - name: Create unzip directory
+        run: mkdir distributionTool
+        
+      - name: Unzip DistributionTool
+        uses: TonyBogdanov/zip@1.0
+        with:
+          args: unzip DistributionToolWindows.zip -d distributionTool\
+          
+      - name: Run DistributionTool
+        run: distributionTool\DistributionTool.exe -b -i com.f10dev.unity.sdPlugin -o build\
+        
+      - name: Testing DIR
+        run: dir
+      
+  # release:
+    # runs-on: windows-latest
+    
+    # steps:
+        
+        # - name: Create draft release
+        # id: create_release
+        # uses: actions/create-release@v1
+        # env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+        # with:
+          # tag_name: "${{env.SOURCE_TAG}}"
+          # release_name: Release Test
+          # draft: true
+          # prerelease: false
 
-      - name: Create draft release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
-        with:
-          tag_name: "${{env.SOURCE_TAG}}"
-          release_name: Release Test
-          draft: true
-          prerelease: false
+      # - name: Upload draft release
+        # uses: actions/upload-release-asset@v1.0.1
+        # env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # with:
+          # upload_url: ${{ steps.create_release.outputs.upload_url }}
+          # asset_path: artifact.zip
+          # asset_name: artifact.zip
+          # asset_content_type: application/zip
 
-      - name: Upload draft release
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifact.zip
-          asset_name: artifact.zip
-          asset_content_type: application/zip
-
-      - name: Publish draft release
-        uses: eregon/publish-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{ steps.create_release.outputs.id }}
+      # - name: Publish draft release
+        # uses: eregon/publish-release@v1
+        # env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # with:
+          # release_id: ${{ steps.create_release.outputs.id }}
