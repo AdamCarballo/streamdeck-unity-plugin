@@ -104,7 +104,7 @@ jobs:
       - name: Run DistributionTool
         run: |
           mkdir release
-          DistributionTool -b -i artifact -o release\
+          DistributionTool.exe -b -i artifact -o release\
         
       - name: Testing DIR
         run: dir
