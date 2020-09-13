@@ -81,11 +81,12 @@ jobs:
       - name: Move result files
         run: |
           mkdir artifact
+          mkdir artifact\plugin
           move pi artifact\pi
           move plugin\images artifact\plugin\images
           move LICENSE artifact\LICENSE
           move manifest.json artifact\manifest.json
-          move dist\StreamDeckUnity.exe artifact\plugin\dist\StreamDeckUnity.exe
+          move dist\StreamDeckUnity.exe artifact\plugin\StreamDeckUnity.exe
       
       # Build StreamDeck plugin   
       - name: Download StreamDeck DistributionTool
