@@ -90,12 +90,9 @@ jobs:
       
       # Build StreamDeck plugin   
       - name: Download StreamDeck DistributionTool
-        uses: wei/wget@v1
-        with:
-          args: https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolWindows.zip
-          
-      - name: Create unzip directory
-        run: mkdir distributionTool
+        run: |
+            mkdir distributionTool
+            curl https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolWindows.zip -o DistributionToolWindows.zip
         
       - name: Unzip DistributionTool
         uses: TonyBogdanov/zip@1.0
