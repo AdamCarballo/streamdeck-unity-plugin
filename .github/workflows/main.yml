@@ -92,13 +92,11 @@ jobs:
       - name: Download StreamDeck DistributionTool
         run: curl https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolWindows.zip -o DistributionToolWindows.zip
         
+      - name: Download unzip
+        run: curl http://stahlworks.com/dev/unzip.exe -o unzip.exe
+        
       - name: Extract DistributionTool
-        run: |
-            python
-            import zipfile
-            with zipfile.ZipFile('DistributionToolWindows.zip','r') as zip_ref: zip_ref.extractall()
-            
-            exit()
+        run: unzip DistributionToolWindows.zip
             
       - name: Run DistributionTool
         run: DistributionTool.exe -b -i com.f10dev.unity.sdPlugin -o artifact\
