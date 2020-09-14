@@ -167,10 +167,10 @@ jobs:
         run: type tags.txt
           
       - name: Echo tags 2
-        run: echo $TAG
+        run: echo "$TAG"
         
       - name: Echo tags 3
-        run: echo ${GITHUB_REF#refs\\tags\\}
+        run: echo "${GITHUB_REF#refs\\tags\\}"
 
       # Build StreamDeck plugin   
       - name: StreamDeck Distribution Tool
@@ -187,7 +187,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
         with:
-          tag_name: "${{env.SOURCE_TAG}}"
+          #tag_name: "${{env.SOURCE_TAG}}"
+          tag_name: "${{env.TAG}}"
           release_name: Release Test
           draft: true
           prerelease: false
