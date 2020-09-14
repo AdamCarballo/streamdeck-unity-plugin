@@ -13,18 +13,23 @@ jobs:
       # Checking-outrepository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
       
+      - name: Define sources
+        id: sources
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs\*\}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs\heads\}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs\tags\}
+          
       - name: Echo stuff
         run: |
           echo $SOURCE_NAME
           echo $SOURCE_BRANCH
           echo $SOURCE_TAG
-          echo $TAG
-          echo $TAG > tag.txt
+          echo $SOURCE_TAG > tag.txt
         env:
           SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
           SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
           SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
-          TAG: ${{ github.event.release.tag_name }}
       
       # Build python
       - name: Setup python
