@@ -83,11 +83,12 @@ jobs:
           mkdir release
           mkdir com.f10dev.unity.sdPlugin
           mkdir com.f10dev.unity.sdPlugin\plugin
+          mkdir com.f10dev.unity.sdPlugin\plugin\dist
           move pi com.f10dev.unity.sdPlugin\pi
           move plugin\images com.f10dev.unity.sdPlugin\plugin\images
           move LICENSE com.f10dev.unity.sdPlugin\LICENSE
           move manifest.json com.f10dev.unity.sdPlugin\manifest.json
-          move dist\StreamDeckUnity.exe com.f10dev.unity.sdPlugin\plugin\StreamDeckUnity.exe
+          move dist\StreamDeckUnity.exe com.f10dev.unity.sdPlugin\plugin\dist\StreamDeckUnity.exe
       
       # Build StreamDeck plugin   
       - name: StreamDeck DistributionTool
