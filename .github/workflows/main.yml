@@ -119,12 +119,6 @@ jobs:
           name: macos-plugin
           path: com.f10dev.unity.sdPlugin\plugin\dist
           
-      # - name: Set tags
-        # id: sources
-        # run: |
-          # echo "::set-env name=TAG::$(type tags.txt)"
-          # echo "::set-output name=SOURCE_TAG::$(type tags.txt)"
-          
       - name: Set tags
         run: echo "::set-env name=TAG::$(type tags.txt)"
 
@@ -141,11 +135,9 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          #SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
         with:
-          #tag_name: "${{env.SOURCE_TAG}}"
           tag_name: "${{env.TAG}}"
-          release_name: Release Test
+          release_name: Automated tagged release
           draft: true
           prerelease: false
 
