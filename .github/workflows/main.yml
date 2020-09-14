@@ -157,7 +157,8 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+          # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+          SOURCE_TAG: ${{ github.event.release.tag_name }}
         with:
           tag_name: "${{env.SOURCE_TAG}}"
           release_name: Release Test
