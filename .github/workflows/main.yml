@@ -17,24 +17,6 @@ jobs:
         run: |
           echo ${GITHUB_REF#refs/tags/}
           cat tags.txt
-        
-      # - name: Define sources
-        # id: sources
-        # run: |
-          # echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
-          # echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
-          # echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
-          
-      # - name: Echo stuff
-        # run: |
-          # echo $SOURCE_NAME
-          # echo $SOURCE_BRANCH
-          # echo $SOURCE_TAG
-          # echo $SOURCE_TAG > tag.txt
-        # env:
-          # SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
-          # SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
-          # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
           
       - name: Upload tags
         uses: actions/upload-artifact@v2
@@ -176,10 +158,15 @@ jobs:
           path: com.f10dev.unity.sdPlugin\plugin\dist
           
       - name: Set tags
-        run: echo ::set-env name=TAG::$(type tags.txt)
+        id: sources
+        run: |
+          echo ::set-env name=TAG::$(type tags.txt)
+          echo ::set-output name=SOURCE_TAG::$(type tags.txt)
         
       - name: Echo tags
-        run: type tags.txt
+        run: |
+          type tags.txt
+          echo $TAG
 
       # Build StreamDeck plugin   
       - name: StreamDeck Distribution Tool
@@ -195,7 +182,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
-          SOURCE_TAG: ${{ env.TAG }}
+          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
         with:
           tag_name: "${{env.SOURCE_TAG}}"
           release_name: Release Test
