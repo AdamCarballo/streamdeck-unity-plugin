@@ -160,13 +160,14 @@ jobs:
       - name: Set tags
         id: sources
         run: |
-          echo ::set-env name=TAG::$(type tags.txt)
-          echo ::set-output name=SOURCE_TAG::$(type tags.txt)
+          echo "::set-env name=TAG::$(type tags.txt)"
+          echo "::set-output name=SOURCE_TAG::$(type tags.txt)"
         
       - name: Echo tags
         run: |
           type tags.txt
           echo $TAG
+          echo ${GITHUB_REF#refs\\tags\\}
 
       # Build StreamDeck plugin   
       - name: StreamDeck Distribution Tool
