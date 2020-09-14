@@ -6,13 +6,10 @@ on:
       - '*'
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-
+  information-ubuntu:
+    runs-on: ubuntu-latest
+    
     steps:
-      # Checking-outrepository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
-      
       - name: Define sources
         id: sources
         run: |
@@ -30,6 +27,19 @@ jobs:
           SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
           SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
           SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+          
+      - name: Upload tag
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-tag
+          path: tag.txt
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      # Checking-outrepository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
       
       # Build python
       - name: Setup python
@@ -52,12 +62,6 @@ jobs:
         with:
           name: windows-plugin
           path: dist\StreamDeckUnity.exe
-          
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: github-tag
-          path: tag.txt
 
           
       # - name: Prepare directory files
@@ -116,7 +120,7 @@ jobs:
           path: dist/StreamDeckUnity
           
   release-export:
-    needs: [build-windows, build-macos]
+    needs: [information-ubuntu, build-windows, build-macos]
     runs-on: windows-latest
     
     steps:
