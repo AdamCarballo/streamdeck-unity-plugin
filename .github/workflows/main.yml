@@ -10,23 +10,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # - name: Define sources
-        # id: sources
-        # run: |
-          # echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs\*\}
-          # echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs\heads\}
-          # echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs\tags\}
-          
-      # - name: Echo stuff
-        # run: |
-          # echo $SOURCE_NAME
-          # echo $SOURCE_BRANCH
-          # echo $SOURCE_TAG
-        # env:
-          # SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
-          # SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
-          # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
-
       # Checking-outrepository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
       
@@ -44,35 +27,6 @@ jobs:
 
       - name: Run PyInstaller
         run: python -m PyInstaller -F plugin\main.spec
-          
-      # - name: Compress artifact
-        # uses: papeloto/action-zip@v1
-        # with:
-          # files: pi/ plugin/images/ LICENSE manifest.json plugin/dist/StreamDeckUnity.exe
-          # recursive: false
-          # dest: artifact.zip
-      
-      # - name: Upload artifact
-        # uses: actions/upload-artifact@v2
-        # with:
-          # name: artifact
-          # path: artifact.zip
-          
-      # - name: Upload artifact
-        # uses: actions/upload-artifact@v2
-        # with:
-          # name: artifact
-          # path: |
-            # pi/
-            # plugin/images/
-            # LICENSE
-            # manifest.json
-            # plugin/dist/StreamDeckUnity.exe
-            
-      # - name: Download artifact
-        # uses: actions/download-artifact@v2
-        # with:
-          # name: artifact
         
       # Artifact handeling
       - name: Upload artifact
@@ -142,15 +96,25 @@ jobs:
     runs-on: windows-latest
     
     steps:
+      # Checking-outrepository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+      
       - name: Define sources
         id: sources
         run: |
           echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs\*\}
           echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs\heads\}
           echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs\tags\}
-        
-      # Checking-outrepository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
+          
+      - name: Echo stuff
+        run: |
+          echo $SOURCE_NAME
+          echo $SOURCE_BRANCH
+          echo $SOURCE_TAG
+        env:
+          SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
+          SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
+          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
          
       - name: Prepare directory files
         run: |
