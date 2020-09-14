@@ -81,19 +81,19 @@ jobs:
       - name: Prepare directory files
         run: |
           mkdir release
-          mkdir artifact
-          mkdir artifact\plugin
-          move pi artifact\pi
-          move plugin\images artifact\plugin\images
-          move LICENSE artifact\LICENSE
-          move manifest.json artifact\manifest.json
-          move dist\StreamDeckUnity.exe artifact\plugin\StreamDeckUnity.exe
+          mkdir com.f10dev.unity.sdPlugin
+          mkdir com.f10dev.unity.sdPlugin\plugin
+          move pi com.f10dev.unity.sdPlugin\pi
+          move plugin\images com.f10dev.unity.sdPlugin\plugin\images
+          move LICENSE com.f10dev.unity.sdPlugin\LICENSE
+          move manifest.json com.f10dev.unity.sdPlugin\manifest.json
+          move dist\StreamDeckUnity.exe com.f10dev.unity.sdPlugin\plugin\StreamDeckUnity.exe
       
       # Build StreamDeck plugin   
       - name: StreamDeck DistributionTool
-        uses: AdamCarballo/StreamDeck-DistributionTool-Action@v0.12
+        uses: AdamCarballo/StreamDeck-DistributionTool-Action@v0.13
         with:
-          input: artifact
+          input: com.f10dev.unity.sdPlugin
           output: release
         
       - name: Testing DIR
