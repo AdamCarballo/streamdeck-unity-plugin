@@ -52,33 +52,6 @@ jobs:
         with:
           name: windows-plugin
           path: dist\StreamDeckUnity.exe
-
-          
-      # - name: Prepare directory files
-        # run: |
-          # mkdir release
-          # mkdir com.f10dev.unity.sdPlugin
-          # mkdir com.f10dev.unity.sdPlugin\plugin
-          # mkdir com.f10dev.unity.sdPlugin\plugin\dist
-          # move pi com.f10dev.unity.sdPlugin\pi
-          # move plugin\images com.f10dev.unity.sdPlugin\plugin\images
-          # move LICENSE com.f10dev.unity.sdPlugin\LICENSE
-          # move manifest.json com.f10dev.unity.sdPlugin\manifest.json
-          # move dist\StreamDeckUnity.exe com.f10dev.unity.sdPlugin\plugin\dist\StreamDeckUnity.exe
-      
-      # # Build StreamDeck plugin   
-      # - name: StreamDeck DistributionTool
-        # uses: AdamCarballo/StreamDeck-DistributionTool-Action@v0.13
-        # with:
-          # input: com.f10dev.unity.sdPlugin
-          # output: release
-      
-      # # Artifact handeling
-      # - name: Upload artifact
-        # uses: actions/upload-artifact@v2
-        # with:
-          # name: windows-plugin
-          # path: release\com.f10dev.unity.streamDeckPlugin
       
   build-macos:
     runs-on: macos-latest
@@ -113,20 +86,9 @@ jobs:
     needs: [information-ubuntu, build-windows, build-macos]
     runs-on: windows-latest
     
-    steps:
-      # - name: Get commit tag
-        # id: sources
-        # run: echo ::set-output name=SOURCE_TAG::${GITHUB_REF/refs\/tags\//}
-          
+    steps:   
       # Checking-outrepository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
-      
-      # - name: Define sources
-        # id: sources
-        # run: |
-          # echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs\*\}
-          # echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs\heads\}
-          # echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs\tags\}
          
       - name: Prepare directory files
         run: |
@@ -157,20 +119,14 @@ jobs:
           name: macos-plugin
           path: com.f10dev.unity.sdPlugin\plugin\dist
           
-      - name: Set tags
-        id: sources
-        run: |
-          echo "::set-env name=TAG::$(type tags.txt)"
-          echo "::set-output name=SOURCE_TAG::$(type tags.txt)"
-        
-      - name: Echo tags
-        run: type tags.txt
+      # - name: Set tags
+        # id: sources
+        # run: |
+          # echo "::set-env name=TAG::$(type tags.txt)"
+          # echo "::set-output name=SOURCE_TAG::$(type tags.txt)"
           
-      - name: Echo tags 2
-        run: echo "$TAG"
-        
-      - name: Echo tags 3
-        run: echo "${GITHUB_REF#refs\\tags\\}"
+      - name: Set tags
+        run: echo "::set-env name=TAG::$(type tags.txt)"
 
       # Build StreamDeck plugin   
       - name: StreamDeck Distribution Tool
@@ -185,7 +141,7 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+          #SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
         with:
           #tag_name: "${{env.SOURCE_TAG}}"
           tag_name: "${{env.TAG}}"
