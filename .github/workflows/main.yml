@@ -1,16 +1,12 @@
-name: CI
+name: Build StreamDeck plugin
 
 on:
   push:
-    # branches: [ master ]
     tags:
       - '*'
-  # pull_request:
-    # branches: [ master ]
 
 jobs:
   build-windows:
-    # runs-on: ubuntu-latest
     runs-on: windows-latest
 
     steps:
@@ -78,58 +74,141 @@ jobs:
         # with:
           # name: artifact
         
-      - name: Prepare directory files
-        run: |
-          mkdir release
-          mkdir com.f10dev.unity.sdPlugin
-          mkdir com.f10dev.unity.sdPlugin\plugin
-          mkdir com.f10dev.unity.sdPlugin\plugin\dist
-          move pi com.f10dev.unity.sdPlugin\pi
-          move plugin\images com.f10dev.unity.sdPlugin\plugin\images
-          move LICENSE com.f10dev.unity.sdPlugin\LICENSE
-          move manifest.json com.f10dev.unity.sdPlugin\manifest.json
-          move dist\StreamDeckUnity.exe com.f10dev.unity.sdPlugin\plugin\dist\StreamDeckUnity.exe
+      # Artifact handeling
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-plugin
+          path: dist\StreamDeckUnity.exe
+
+          
+      # - name: Prepare directory files
+        # run: |
+          # mkdir release
+          # mkdir com.f10dev.unity.sdPlugin
+          # mkdir com.f10dev.unity.sdPlugin\plugin
+          # mkdir com.f10dev.unity.sdPlugin\plugin\dist
+          # move pi com.f10dev.unity.sdPlugin\pi
+          # move plugin\images com.f10dev.unity.sdPlugin\plugin\images
+          # move LICENSE com.f10dev.unity.sdPlugin\LICENSE
+          # move manifest.json com.f10dev.unity.sdPlugin\manifest.json
+          # move dist\StreamDeckUnity.exe com.f10dev.unity.sdPlugin\plugin\dist\StreamDeckUnity.exe
       
+      # # Build StreamDeck plugin   
+      # - name: StreamDeck DistributionTool
+        # uses: AdamCarballo/StreamDeck-DistributionTool-Action@v0.13
+        # with:
+          # input: com.f10dev.unity.sdPlugin
+          # output: release
+      
+      # # Artifact handeling
+      # - name: Upload artifact
+        # uses: actions/upload-artifact@v2
+        # with:
+          # name: windows-plugin
+          # path: release\com.f10dev.unity.streamDeckPlugin
+      
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      # Checking-outrepository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+      
+      # Build python
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: x64
+         
+      - name: Install dependencies
+        uses: BSFishy/pip-action@v1
+        with:
+          requirements: requirements.txt
+
+      - name: Run PyInstaller
+        run: python -m PyInstaller -F plugin/main.spec
+        
+      # Artifact handeling
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: macos-plugin
+          path: dist/StreamDeckUnity
+          
+  release-export:
+    needs: [build-windows, build-macos]
+    runs-on: windows-latest
+    
+    steps:
+      - name: Define sources
+      id: sources
+      run: |
+        echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs\*\}
+        echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs\heads\}
+        echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs\tags\}
+        
+      # Checking-outrepository under $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+         
+      - name: Prepare directory files
+      run: |
+        mkdir release
+        mkdir com.f10dev.unity.sdPlugin
+        mkdir com.f10dev.unity.sdPlugin\plugin
+        mkdir com.f10dev.unity.sdPlugin\plugin\dist
+        move pi com.f10dev.unity.sdPlugin\pi
+        move plugin\images com.f10dev.unity.sdPlugin\plugin\images
+        move LICENSE com.f10dev.unity.sdPlugin\LICENSE
+        move manifest.json com.f10dev.unity.sdPlugin\manifest.json
+
+      # Artifact handeling
+      - name: Download Windows artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: windows-plugin
+        path: com.f10dev.unity.sdPlugin\plugin\dist
+          
+      - name: Download MacOS artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: macos-plugin
+        path: com.f10dev.unity.sdPlugin\plugin\dist
+
       # Build StreamDeck plugin   
-      - name: StreamDeck DistributionTool
-        uses: AdamCarballo/StreamDeck-DistributionTool-Action@v0.13
+      - name: StreamDeck Distribution Tool
+        uses: AdamCarballo/streamdeck-distribution-tool@v1
         with:
           input: com.f10dev.unity.sdPlugin
           output: release
-        
-      - name: Testing DIR
-        run: dir
-      
-  # release:
-    # runs-on: windows-latest
-    
-    # steps:
-        
-        # - name: Create draft release
-        # id: create_release
-        # uses: actions/create-release@v1
-        # env:
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
-        # with:
-          # tag_name: "${{env.SOURCE_TAG}}"
-          # release_name: Release Test
-          # draft: true
-          # prerelease: false
 
-      # - name: Upload draft release
-        # uses: actions/upload-release-asset@v1.0.1
-        # env:
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # with:
-          # upload_url: ${{ steps.create_release.outputs.upload_url }}
-          # asset_path: artifact.zip
-          # asset_name: artifact.zip
-          # asset_content_type: application/zip
+      # Create Release   
+      - name: Create draft release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+      with:
+        tag_name: "${{env.SOURCE_TAG}}"
+        release_name: Release Test
+        draft: true
+        prerelease: false
 
-      # - name: Publish draft release
-        # uses: eregon/publish-release@v1
-        # env:
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # with:
-          # release_id: ${{ steps.create_release.outputs.id }}
+      - name: Upload draft release
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release\com.f10dev.unity.streamDeckPlugin
+          asset_name: com.f10dev.unity.streamDeckPlugin
+          asset_content_type: application/zip
+
+      - name: Publish draft release
+        uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.create_release.outputs.id }}
