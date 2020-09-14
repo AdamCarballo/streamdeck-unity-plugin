@@ -115,10 +115,13 @@ jobs:
           echo $SOURCE_NAME
           echo $SOURCE_BRANCH
           echo $SOURCE_TAG
+          echo $TAG
+          echo ${{ github.event.release.tag_name }}
         env:
           SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
           SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
           SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+          TAG: ${{ github.event.release.tag_name }}
          
       - name: Prepare directory files
         run: |
