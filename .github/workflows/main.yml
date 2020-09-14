@@ -11,28 +11,36 @@ jobs:
     
     steps:
       - name: Define sources
-        id: sources
+        run: echo ${GITHUB_REF#refs/tags/} > tags.txt
+        
+      - name: Echo sources
         run: |
-          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
-          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+          echo ${GITHUB_REF#refs/tags/}
+          cat tags.txt
+        
+      # - name: Define sources
+        # id: sources
+        # run: |
+          # echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          # echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          # echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
           
-      - name: Echo stuff
-        run: |
-          echo $SOURCE_NAME
-          echo $SOURCE_BRANCH
-          echo $SOURCE_TAG
-          echo $SOURCE_TAG > tag.txt
-        env:
-          SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
-          SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
-          SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
+      # - name: Echo stuff
+        # run: |
+          # echo $SOURCE_NAME
+          # echo $SOURCE_BRANCH
+          # echo $SOURCE_TAG
+          # echo $SOURCE_TAG > tag.txt
+        # env:
+          # SOURCE_NAME: ${{ steps.sources.outputs.SOURCE_NAME }}
+          # SOURCE_BRANCH: ${{ steps.sources.outputs.SOURCE_BRANCH }}
+          # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
           
-      - name: Upload tag
+      - name: Upload tags
         uses: actions/upload-artifact@v2
         with:
-          name: github-tag
-          path: tag.txt
+          name: github-tags
+          path: tags.txt
 
   build-windows:
     runs-on: windows-latest
@@ -150,10 +158,10 @@ jobs:
           move manifest.json com.f10dev.unity.sdPlugin\manifest.json
 
       # Artifact handeling
-      - name: Download Tag
+      - name: Download tags
         uses: actions/download-artifact@v2
         with:
-          name: github-tag
+          name: github-tags
           
       - name: Download Windows artifact
         uses: actions/download-artifact@v2
@@ -167,8 +175,11 @@ jobs:
           name: macos-plugin
           path: com.f10dev.unity.sdPlugin\plugin\dist
           
-      - name: Set tag
-        run: echo ::set-env name=TAG::$(cat tag.txt)
+      - name: Set tags
+        run: echo ::set-env name=TAG::$(type tags.txt)
+        
+      - name: Echo tags
+        run: type tags.txt
 
       # Build StreamDeck plugin   
       - name: StreamDeck Distribution Tool
