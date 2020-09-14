@@ -1,13 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
-# pip install PyInstaller
-# pip install websocket_client
-# pip install six ->NEEDED?
 
 block_cipher = None
 
 
 a = Analysis(['main.py', 'actions.py', 'event_data.py', 'unity_response_data.py', 'unity_socket.py', 'websocket_server.py'],
-             pathex=['C:\\Users\\batma\\AppData\\Roaming\\Elgato\\StreamDeck\\Plugins\\com.f10dev.unity.sdPlugin\\plugin'],
+             pathex=[],
              binaries=[],
              datas=[],
              hiddenimports=[],
