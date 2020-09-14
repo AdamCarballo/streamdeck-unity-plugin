@@ -164,10 +164,13 @@ jobs:
           echo "::set-output name=SOURCE_TAG::$(type tags.txt)"
         
       - name: Echo tags
-        run: |
-          type tags.txt
-          echo $TAG
-          echo ${GITHUB_REF#refs\\tags\\}
+        run: type tags.txt
+          
+      - name: Echo tags 2
+        run: echo $TAG
+        
+      - name: Echo tags 3
+        run: echo ${GITHUB_REF#refs\\tags\\}
 
       # Build StreamDeck plugin   
       - name: StreamDeck Distribution Tool
@@ -182,7 +185,6 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
           SOURCE_TAG: ${{ steps.sources.outputs.SOURCE_TAG }}
         with:
           tag_name: "${{env.SOURCE_TAG}}"
