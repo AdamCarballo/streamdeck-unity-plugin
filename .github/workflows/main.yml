@@ -78,8 +78,9 @@ jobs:
         # with:
           # name: artifact
         
-      - name: Move result files
+      - name: Prepare directory files
         run: |
+          mkdir release
           mkdir artifact
           mkdir artifact\plugin
           move pi artifact\pi
@@ -89,23 +90,11 @@ jobs:
           move dist\StreamDeckUnity.exe artifact\plugin\StreamDeckUnity.exe
       
       # Build StreamDeck plugin   
-      - name: Download StreamDeck DistributionTool
-        run: curl https://developer.elgato.com/documentation/stream-deck/distributiontool/DistributionToolWindows.zip -o DistributionToolWindows.zip
-        
-      - name: Download unzip
-        run: curl http://stahlworks.com/dev/unzip.exe -o unzip.exe
-        
-      - name: Extract DistributionTool
-        run: unzip DistributionToolWindows.zip
-        
-      - name: Testing DIR
-        run: dir
-            
-      - name: Run DistributionTool
-        run: |
-          mkdir release
-          echo $GITHUB_WORKSPACE
-          $GITHUB_WORKSPACE\DistributionTool.exe -b -i artifact -o release\
+      - name: StreamDeck DistributionTool
+        uses: AdamCarballo/StreamDeck-DistributionTool-Action@v0.12
+        with:
+          input: artifact
+          output: release
         
       - name: Testing DIR
         run: dir
