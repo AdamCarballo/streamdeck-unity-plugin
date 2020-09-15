@@ -1,8 +1,6 @@
-# Allow final built EXE
-!StreamDeckUnity.exe
-
 # PyInstall build
 plugin/build/
+plugin/dist/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
