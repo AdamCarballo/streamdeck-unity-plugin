@@ -1,21 +1,10 @@
-import os
 import sys
-
-# Internal Python
-#sys.path.append(os.path.join(sys.path[0], '..', '..'))
-#sys.path.append(os.path.join(sys.path[0], '..', '..', 'websocket_client'))
-#sys.path.append(os.path.join(sys.path[0], '..', '..', 'websocket_client', 'websocket'))
-
-# External Python
-#sys.path.append(os.path.join(sys.path[0], 'websocket_client'))
-#sys.path.append(os.path.join(sys.path[0], 'websocket_client', 'websocket'))
-
 import websocket
-from threading import Thread
 import json
 import unity_socket
-from actions import InvokeMethodAction, SetFieldPropertyAction, PlayModeAction, PauseModeAction, ExecuteMenu
+from threading import Thread
 from event_data import EventData
+from actions import InvokeMethodAction, SetFieldPropertyAction, PlayModeAction, PauseModeAction, ExecuteMenu
 
 
 # Open the web socket to Stream Deck
@@ -27,6 +16,7 @@ def open_streamdeck_socket():
 	sd_socket = websocket.WebSocketApp(host, on_message=on_message, on_error=on_error, on_close=on_close)
 	sd_socket.on_open = on_open
 	sd_socket.run_forever()
+
 
 def on_message(ws, message):
 	print(message)

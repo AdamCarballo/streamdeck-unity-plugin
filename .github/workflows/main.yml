@@ -12,11 +12,6 @@ jobs:
     steps:
       - name: Define sources
         run: echo ${GITHUB_REF#refs/tags/} > tags.txt
-        
-      - name: Echo sources
-        run: |
-          echo ${GITHUB_REF#refs/tags/}
-          cat tags.txt
           
       - name: Upload tags
         uses: actions/upload-artifact@v2
