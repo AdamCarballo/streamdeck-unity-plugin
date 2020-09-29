@@ -174,7 +174,7 @@ def show_alert(context):
 
 
 if __name__ == "__main__":
-	BASE_PLUGIN_NAME = "com.f10dev.unity"
+	BASE_PLUGIN_NAME = "com.adamcarballo.unity-integration"
 	actions = {}
 	sd_socket = None
 	u_socket = None

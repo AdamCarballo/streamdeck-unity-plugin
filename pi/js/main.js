@@ -111,7 +111,7 @@ function setSettings() {
 
 function openHelp() {
     window.xtWindow = window.open(
-        "https://github.com/AdamCarballo/streamdeck-unity-plugin",
+        "https://f10.dev/documentation/streamdeckintegration/manual/plugin.html",
         "Plugin Help"
     );
 }

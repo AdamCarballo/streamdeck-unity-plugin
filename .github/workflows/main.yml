@@ -88,13 +88,13 @@ jobs:
       - name: Prepare directory files
         run: |
           mkdir release
-          mkdir com.f10dev.unity.sdPlugin
-          mkdir com.f10dev.unity.sdPlugin\plugin
-          mkdir com.f10dev.unity.sdPlugin\plugin\dist
-          move pi com.f10dev.unity.sdPlugin\pi
-          move plugin\images com.f10dev.unity.sdPlugin\plugin\images
-          move LICENSE com.f10dev.unity.sdPlugin\LICENSE
-          move manifest.json com.f10dev.unity.sdPlugin\manifest.json
+          mkdir com.adamcarballo.unity-integration.sdPlugin
+          mkdir com.adamcarballo.unity-integration.sdPlugin\plugin
+          mkdir com.adamcarballo.unity-integration.sdPlugin\plugin\dist
+          move pi com.adamcarballo.unity-integration.sdPlugin\pi
+          move plugin\images com.adamcarballo.unity-integration.sdPlugin\plugin\images
+          move LICENSE com.adamcarballo.unity-integration.sdPlugin\LICENSE
+          move manifest.json com.adamcarballo.unity-integration.sdPlugin\manifest.json
 
       # Artifact handeling
       - name: Download tags
@@ -106,13 +106,13 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: windows-plugin
-          path: com.f10dev.unity.sdPlugin\plugin\dist
+          path: com.adamcarballo.unity-integration.sdPlugin\plugin\dist
           
       - name: Download MacOS artifact
         uses: actions/download-artifact@v2
         with:
           name: macos-plugin
-          path: com.f10dev.unity.sdPlugin\plugin\dist
+          path: com.adamcarballo.unity-integration.sdPlugin\plugin\dist
           
       - name: Set tags
         run: echo "::set-env name=TAG::$(type tags.txt)"
@@ -121,7 +121,7 @@ jobs:
       - name: StreamDeck Distribution Tool
         uses: AdamCarballo/streamdeck-distribution-tool@v1
         with:
-          input: com.f10dev.unity.sdPlugin
+          input: com.adamcarballo.unity-integration.sdPlugin
           output: release
 
       # Create Release   
@@ -142,8 +142,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: release\com.f10dev.unity.streamDeckPlugin
-          asset_name: com.f10dev.unity.streamDeckPlugin
+          asset_path: release\com.adamcarballo.unity-integration.streamDeckPlugin
+          asset_name: com.adamcarballo.unity-integration.streamDeckPlugin
           asset_content_type: application/zip
 
       - name: Publish draft release
