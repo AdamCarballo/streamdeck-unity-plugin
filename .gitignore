@@ -1,6 +1,7 @@
 # PyInstall build
-plugin/build/
-plugin/dist/
+*dist/
+*build/
+*main.build/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
