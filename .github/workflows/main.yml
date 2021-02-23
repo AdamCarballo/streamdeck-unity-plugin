@@ -115,14 +115,14 @@ jobs:
           path: com.adamcarballo.unity-integration.sdPlugin\plugin\dist
 
       - name: Set tags
-        run: echo "TAG=$(type tags.txt)" >> $GITHUB_ENV
+        run: echo "TAG=$(type tags.txt)" >> $env:GITHUB_ENV
         #run: echo "::set-env name=TAG::$(type tags.txt)"
-
-      - name: Echo tags
-        run: echo ${{ env.TAG }}
 
       - name: Type tags
         run: type tags.txt
+
+      - name: Echo tags
+        run: echo ${{ env.TAG }}
 
       # Build StreamDeck plugin
       - name: StreamDeck Distribution Tool
