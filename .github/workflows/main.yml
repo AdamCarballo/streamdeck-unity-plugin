@@ -36,17 +36,31 @@ jobs:
       - name: Install dependencies
         uses: BSFishy/pip-action@v1
         with:
-          requirements: requirements.txt
+          #requirements: requirements.txt
+          requirements: requirements-win.txt
 
-      - name: Run PyInstaller
-        run: python -m PyInstaller -F plugin\main.spec
+      # - name: Run PyInstaller
+      #   run: python -m PyInstaller -F plugin\main.spec
+
+      # # Artifact handeling
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: windows-plugin
+      #     path: dist\StreamDeckUnity.exe
+
+      - name: Run Nuitka
+        run: python -m nuitka --mingw64 --follow-imports plugin\main.py --show-progress --standalone --assume-yes-for-downloads
+
+      - name: Rename .exe file
+        run: ren main.dist\main.exe StreamDeckUnity.exe
 
       # Artifact handeling
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: windows-plugin
-          path: dist\StreamDeckUnity.exe
+          path: main.dist\*
 
   build-macos:
     runs-on: macos-latest
@@ -65,7 +79,8 @@ jobs:
       - name: Install dependencies
         uses: BSFishy/pip-action@v1
         with:
-          requirements: requirements.txt
+          #requirements: requirements.txt
+          requirements: requirements-osx.txt
 
       - name: Run PyInstaller
         run: python -m PyInstaller -F plugin/main.spec
