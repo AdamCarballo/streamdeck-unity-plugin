@@ -1,6 +1,6 @@
 # Setup logging
 import logging
-logging.basicConfig(filename="main.log", filemode="w", level=logging.DEBUG)
+# logging.basicConfig(filename="main.log", filemode="w", level=logging.DEBUG)
 
 import sys
 import websocket
