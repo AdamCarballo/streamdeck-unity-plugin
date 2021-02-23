@@ -49,14 +49,11 @@ jobs:
       #     name: windows-plugin
       #     path: dist\StreamDeckUnity.exe
 
-      # - name: Import MinGW64
-      #   run: ?
-
       - name: Run Nuitka
         run: python -m nuitka --mingw64 --follow-imports plugin\main.py --show-progress --standalone --assume-yes-for-downloads
 
       - name: Rename .exe file
-        run: rename main.dist\main.exe StreamDeckUnity.exe
+        run: ren main.dist\main.exe StreamDeckUnity.exe
 
       # Artifact handeling
       - name: Upload artifact
