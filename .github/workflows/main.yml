@@ -8,11 +8,11 @@ on:
 jobs:
   information-ubuntu:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Define sources
         run: echo ${GITHUB_REF#refs/tags/} > tags.txt
-          
+
       - name: Upload tags
         uses: actions/upload-artifact@v2
         with:
@@ -25,14 +25,14 @@ jobs:
     steps:
       # Checking-outrepository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
-      
+
       # Build python
       - name: Setup python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
           architecture: x64
-         
+
       - name: Install dependencies
         uses: BSFishy/pip-action@v1
         with:
@@ -40,28 +40,28 @@ jobs:
 
       - name: Run PyInstaller
         run: python -m PyInstaller -F plugin\main.spec
-        
+
       # Artifact handeling
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: windows-plugin
           path: dist\StreamDeckUnity.exe
-      
+
   build-macos:
     runs-on: macos-latest
 
     steps:
       # Checking-outrepository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
-      
+
       # Build python
       - name: Setup python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
           architecture: x64
-         
+
       - name: Install dependencies
         uses: BSFishy/pip-action@v1
         with:
@@ -69,22 +69,22 @@ jobs:
 
       - name: Run PyInstaller
         run: python -m PyInstaller -F plugin/main.spec
-        
+
       # Artifact handeling
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: macos-plugin
           path: dist/StreamDeckUnity
-          
+
   release-export:
     needs: [information-ubuntu, build-windows, build-macos]
     runs-on: windows-latest
-    
-    steps:   
+
+    steps:
       # Checking-outrepository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
-         
+
       - name: Prepare directory files
         run: |
           mkdir release
@@ -101,30 +101,31 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: github-tags
-          
+
       - name: Download Windows artifact
         uses: actions/download-artifact@v2
         with:
           name: windows-plugin
           path: com.adamcarballo.unity-integration.sdPlugin\plugin\dist
-          
+
       - name: Download MacOS artifact
         uses: actions/download-artifact@v2
         with:
           name: macos-plugin
           path: com.adamcarballo.unity-integration.sdPlugin\plugin\dist
-          
-      - name: Set tags
-        run: echo "::set-env name=TAG::$(type tags.txt)"
 
-      # Build StreamDeck plugin   
+      - name: Set tags
+        run: echo "TAG=$(cat tags.txt)" >> $GITHUB_ENV
+        #run: echo "::set-env name=TAG::$(type tags.txt)"
+
+      # Build StreamDeck plugin
       - name: StreamDeck Distribution Tool
         uses: AdamCarballo/streamdeck-distribution-tool@v1
         with:
           input: com.adamcarballo.unity-integration.sdPlugin
           output: release
 
-      # Create Release   
+      # Create Release
       - name: Create draft release
         id: create_release
         uses: actions/create-release@v1
