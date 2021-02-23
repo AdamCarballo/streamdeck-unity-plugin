@@ -118,6 +118,12 @@ jobs:
         run: echo "TAG=$(type tags.txt)" >> $GITHUB_ENV
         #run: echo "::set-env name=TAG::$(type tags.txt)"
 
+      - name: Echo tags
+        run: echo ${{ env.TAG }}
+
+      - name: Type tags
+        run: type tags.txt
+
       # Build StreamDeck plugin
       - name: StreamDeck Distribution Tool
         uses: AdamCarballo/streamdeck-distribution-tool@v1
@@ -132,7 +138,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "${{env.TAG}}"
+          tag_name: "${{ env.TAG }}"
           release_name: Automated tagged release
           draft: true
           prerelease: false
