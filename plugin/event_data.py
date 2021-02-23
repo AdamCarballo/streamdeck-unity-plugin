@@ -2,17 +2,17 @@ import json
 
 
 class EventData:
-	def __init__(self, json_data):
-		data = json.loads(json_data)
+    def __init__(self, json_data):
+        data = json.loads(json_data)
 
-		self.action = data.get("action")
-		self.event = data.get("event")
-		self.context = data.get("context")
-		self.device = data.get("device")
+        self.action = data.get("action")
+        self.event = data.get("event")
+        self.context = data.get("context")
+        self.device = data.get("device")
 
-		data_payload = data.get("payload")
+        data_payload = data.get("payload")
 
-		if data_payload is not None:
-			self.settings = data_payload.get("settings")
-			self.coordinates = data_payload.get("coordinates")
-			self.state = data_payload.get("state", 0)
+        if data_payload is not None:
+            self.settings = data_payload.get("settings")
+            self.coordinates = data_payload.get("coordinates")
+            self.state = data_payload.get("state", 0)

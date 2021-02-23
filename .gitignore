@@ -10,3 +10,6 @@ __pycache__/
 
 # Rider
 .idea/
+
+# Logs
+*.log

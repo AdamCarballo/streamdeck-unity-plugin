@@ -1,11 +1,12 @@
 import json
+import logging
 from websocket_server import WebsocketServer
 from unity_response_data import UnityResponseData
 
 
 class UnityWebSocket:
 	def __init__(self, port):
-		print("Creating Unity socket")
+		logging.info("Creating Unity socket")
 		self.server = WebsocketServer(port)
 		self.server.set_fn_new_client(self.new_client)
 		self.server.set_fn_message_received(self.on_message)
@@ -21,7 +22,7 @@ class UnityWebSocket:
 		self.send("open-socket")
 
 	def on_message(self, client, ws, message):
-		print(message)
+		logging.debug(message)
 		data = UnityResponseData(message)
 
 		{
