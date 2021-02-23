@@ -117,10 +117,19 @@ def on_open(ws):
 def create_unity_socket():
     global u_socket
     u_socket = unity_socket.UnityWebSocket(UNITY_PORT)
-	u_socket.on_play_mode_state_changed = lambda data: set_state_all_actions(PlayModeAction, data.payload["state"])
-	u_socket.on_pause_mode_state_changed = lambda data: set_state_all_actions(PauseModeAction, data.payload["state"])
-	u_socket.on_set_state = lambda data: set_state(data.context, data.payload["state"])
-	u_socket.start()
+    u_socket.on_play_mode_state_changed = lambda data: set_state_all_actions(PlayModeAction,
+                                                                             data.payload["state"])
+    u_socket.on_pause_mode_state_changed = lambda data: set_state_all_actions(PauseModeAction,
+                                                                              data.payload["state"])
+    u_socket.on_set_title = lambda data: set_title_by_settings(data.payload["group-id"],
+                                                               data.payload["id"],
+                                                               data.payload["title"])
+    u_socket.on_set_image = lambda data: set_image_by_settings(data.payload["group-id"],
+                                                               data.payload["id"],
+                                                               data.payload["image"])
+    u_socket.on_set_state = lambda data: set_state(data.context,
+                                                   data.payload["state"])
+    u_socket.start()
 
 
 def get_action_name(action_name):
@@ -132,6 +141,57 @@ def set_state_all_actions(class_type, state):
 
     for context in context_list:
         set_state(context, state)
+
+
+def set_title_by_settings(group_id, member_id, title):
+    if sd_socket is None:
+        return
+
+    context = get_action_context_by_settings(group_id, member_id)
+    if context is None:
+        return
+
+    data = {
+        "event": "setTitle",
+        "context": context,
+        "payload": {
+            "title": title
+        }
+    }
+
+    logging.info("Changing title from context %s to %s" % (context, title))
+    sd_socket.send(json.dumps(data))
+
+
+def set_image_by_settings(group_id, member_id, image):
+    if sd_socket is None:
+        return
+
+    context = get_action_context_by_settings(group_id, member_id)
+    if context is None:
+        return
+
+    data = {
+        "event": "setImage",
+        "context": context,
+        "payload": {
+            "image": image
+        }
+    }
+
+    logging.info("Changing image from context %s to %s" % (context, image))
+    sd_socket.send(json.dumps(data))
+
+
+def get_action_context_by_settings(group_id, member_id):
+    for key, value in actions.items():
+        if value.settings.get("id") != member_id:
+            continue
+
+        if value.settings.get("group-id") != group_id:
+            continue
+
+        return key
 
 
 def get_actions_context_by_class(class_type):
