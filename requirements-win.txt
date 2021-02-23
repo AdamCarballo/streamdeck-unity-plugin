@@ -1,0 +1,2 @@
+Nuitka=0.6.9.1
+websocket-client==0.57.0
