@@ -82,7 +82,7 @@
   "CategoryIcon": "plugin/images/actions/category",
   "PropertyInspectorPath": "pi/index.html",
   "URL": "https://f10.dev",
-  "Version": "1.0.0",
+  "Version": "1.1.0",
   "DefaultWindowSize": [500, 650],
   "OS": [
     {
