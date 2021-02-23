@@ -50,7 +50,7 @@ jobs:
       #     path: dist\StreamDeckUnity.exe
 
       - name: Run Nuitka
-        run: python -m nuitka --mingw64 --recurse-all plugin\main.py --show-progress --standalone
+        run: python -m nuitka --mingw64 --follow-imports plugin\main.py --show-progress --standalone
 
       - name: Rename .exe file
         run: rename main.dist\main.exe StreamDeckUnity.exe
