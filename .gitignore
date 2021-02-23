@@ -1,8 +1,7 @@
-# Allow final built EXE
-!StreamDeckUnity.exe
-
 # PyInstall build
-plugin/build/
+*dist/
+*build/
+*main.build/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -11,3 +10,6 @@ __pycache__/
 
 # Rider
 .idea/
+
+# Logs
+*.log

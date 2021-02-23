@@ -15,7 +15,7 @@
       ],
       "Tooltip": "",
       "PropertyInspectorPath": "pi/playMode.html",
-      "UUID": "com.f10dev.unity.play-mode"
+      "UUID": "com.adamcarballo.unity-integration.play-mode"
     },
     {
       "Icon": "plugin/images/actions/pause",
@@ -32,7 +32,7 @@
       ],
       "Tooltip": "",
       "PropertyInspectorPath": "pi/pauseMode.html",
-      "UUID": "com.f10dev.unity.pause-mode"
+      "UUID": "com.adamcarballo.unity-integration.pause-mode"
     },
     {
       "Icon": "plugin/images/actions/execute",
@@ -44,7 +44,7 @@
       ],
       "Tooltip": "",
       "PropertyInspectorPath": "pi/executeMenu.html",
-      "UUID": "com.f10dev.unity.execute-menu"
+      "UUID": "com.adamcarballo.unity-integration.execute-menu"
     },
     {
       "Icon": "plugin/images/actions/invoke",
@@ -56,7 +56,7 @@
       ],
       "Tooltip": "",
       "PropertyInspectorPath": "pi/invokeMethod.html",
-      "UUID": "com.f10dev.unity.invoke-method"
+      "UUID": "com.adamcarballo.unity-integration.invoke-method"
     },
     {
       "Icon": "plugin/images/actions/set",
@@ -68,21 +68,21 @@
       ],
       "Tooltip": "",
       "PropertyInspectorPath": "pi/setFieldProperty.html",
-      "UUID": "com.f10dev.unity.set-field-property"
+      "UUID": "com.adamcarballo.unity-integration.set-field-property"
     }
   ],
   "SDKVersion": 2,
-  "Author": "f10dev",
+  "Author": "Àdam Carballo",
   "CodePathMac": "plugin/dist/StreamDeckUnity",
   "CodePathWin": "plugin/dist/StreamDeckUnity.exe",
-  "Description": "Description.",
-  "Name": "Unity",
+  "Description": "Interact, invoke, execute and control any Unity Editor or Unity built projects using your Stream Deck.",
+  "Name": "Unity Integration",
   "Icon": "plugin/images/actions/plugin",
   "Category": "Unity",
   "CategoryIcon": "plugin/images/actions/category",
   "PropertyInspectorPath": "pi/index.html",
-  "URL": "https://www.elgato.com/gaming/stream-deck",
-  "Version": "1.0.0",
+  "URL": "https://f10.dev",
+  "Version": "1.1.0",
   "DefaultWindowSize": [500, 650],
   "OS": [
     {

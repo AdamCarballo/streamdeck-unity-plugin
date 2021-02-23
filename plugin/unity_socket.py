@@ -1,17 +1,20 @@
 import json
+import logging
 from websocket_server import WebsocketServer
 from unity_response_data import UnityResponseData
 
 
 class UnityWebSocket:
 	def __init__(self, port):
-		print("Creating Unity socket")
+		logging.info("Creating Unity socket")
 		self.server = WebsocketServer(port)
 		self.server.set_fn_new_client(self.new_client)
 		self.server.set_fn_message_received(self.on_message)
 
 		self.on_play_mode_state_changed = self.event_default
 		self.on_pause_mode_state_changed = self.event_default
+		self.on_set_title = self.event_default
+		self.on_set_image = self.event_default
 		self.on_set_state = self.event_default
 
 	def start(self):
@@ -21,13 +24,15 @@ class UnityWebSocket:
 		self.send("open-socket")
 
 	def on_message(self, client, ws, message):
-		print(message)
+		logging.debug(message)
 		data = UnityResponseData(message)
 
 		{
 			"setState": self.on_set_state,
 			"playModeStateChanged": self.on_play_mode_state_changed,
-			"pauseModeStateChanged": self.on_pause_mode_state_changed
+			"pauseModeStateChanged": self.on_pause_mode_state_changed,
+			"setTitle": self.on_set_title,
+			"setImage": self.on_set_image
 		}.get(data.event, self.event_default)(data)
 
 	def send(self, action, context=None, settings=None, state=0):

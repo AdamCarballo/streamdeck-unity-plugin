@@ -2,7 +2,6 @@
 
 block_cipher = None
 
-
 a = Analysis(['main.py', 'actions.py', 'event_data.py', 'unity_response_data.py', 'unity_socket.py', 'websocket_server.py'],
              pathex=[],
              binaries=[],
