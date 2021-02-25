@@ -181,12 +181,7 @@ class WebSocketHandler(StreamRequestHandler):
                 self.read_next_message()
 
     def read_bytes(self, num):
-        # python3 gives ordinal of byte directly
-        bytes = self.rfile.read(num)
-        if sys.version_info[0] < 3:
-            return map(ord, bytes)
-        else:
-            return bytes
+        return self.rfile.read(num)
 
     def read_next_message(self):
         try:
@@ -210,14 +205,14 @@ class WebSocketHandler(StreamRequestHandler):
             self.keep_alive = 0
             return
         if not masked:
-            logger.warn("Client must always be masked.")
+            logger.warning("Client must always be masked.")
             self.keep_alive = 0
             return
         if opcode == OPCODE_CONTINUATION:
-            logger.warn("Continuation frames are not supported.")
+            logger.warning("Continuation frames are not supported.")
             return
         elif opcode == OPCODE_BINARY:
-            logger.warn("Binary frames are not supported.")
+            logger.warning("Binary frames are not supported.")
             return
         elif opcode == OPCODE_TEXT:
             opcode_handler = self.server._message_received_
