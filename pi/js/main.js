@@ -111,7 +111,7 @@ function setSettings() {
 
 function openHelp() {
     window.xtWindow = window.open(
-        "https://f10.dev/documentation/streamdeckintegration/",
+        "https://docs.f10.dev/streamdeckintegration/",
         "Plugin Help"
     );
 }
