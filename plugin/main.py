@@ -1,20 +1,25 @@
+import os
+
 # Setup logging
 import logging
-# logging.basicConfig(filename="main.log", filemode="w", level=logging.DEBUG)
+if os.environ.get("SDI_DEBUG", False):
+    logging.basicConfig(filename="main.log", filemode="w", level=logging.DEBUG)
 
 import sys
 import websocket
 import json
 import unity_socket
+from decimal import *
 from threading import Thread
 from event_data import EventData
-from actions import InvokeMethodAction, SetFieldPropertyAction, PlayModeAction, PauseModeAction, ExecuteMenu
+from actions import InvokeMethodAction, SetFieldPropertyAction, \
+        PlayModeAction, PauseModeAction, ExecuteMenuAction, ScriptedAction
 
 
 # Open the web socket to Stream Deck
 def open_streamdeck_socket():
     global sd_socket
-    websocket.enableTrace(True)  # <- Not sure if needed
+    # websocket.enableTrace(True)  # <- Not sure if needed
     # Use 127.0.0.1 because Windows needs 300ms to resolve localhost
     host = "ws://127.0.0.1:%s" % SD_PORT
     sd_socket = websocket.WebSocketApp(host, on_message=on_message, on_error=on_error, on_close=on_close)
@@ -27,6 +32,13 @@ def on_message(ws, message):
     data = EventData(message)
 
     # Switch function blocks
+    def device_did_connect():
+        # Add device if is not in the devices array
+        if data.device in devices:
+            return
+
+        devices[data.device] = data.device_info
+
     def will_appear():
         # Add current instance if is not in actions	array
         if data.context in actions:
@@ -38,7 +50,8 @@ def on_message(ws, message):
             get_action_name("set-field-property"): SetFieldPropertyAction,
             get_action_name("play-mode"): PlayModeAction,
             get_action_name("pause-mode"): PauseModeAction,
-            get_action_name("execute-menu"): ExecuteMenu
+            get_action_name("execute-menu"): ExecuteMenuAction,
+            get_action_name("scripted"): ScriptedAction
         }
 
         # If crashes, probably mapped_action_classes is missing a new class
@@ -48,6 +61,8 @@ def on_message(ws, message):
             data.coordinates,
             data.state
         )
+
+        set_dial_feedback(data.context)
 
     def will_disappear():
         # Remove current instance from array
@@ -75,21 +90,68 @@ def on_message(ws, message):
             action = actions[data.context]
             action.on_key_up(data.state)
 
-            # Support for stupid unavoidable state change manually triggered by Elgato
+            # Support for unavoidable state change manually triggered by Elgato
             if action.state_changed:
                 # setTimeout(function(){ Utils.setState(self.context, self.state); }, 4000);
                 set_state(action.context, action.state)
 
+    # Send onDialRotate event to actions
+    def dial_rotate():
+        if data.context not in actions:
+            return
+
+        if sd_socket is None:
+            return
+
+        action = actions[data.context]
+        action.on_dial_rotate(data.ticks)
+
+        try:
+            match action.settings["type"]:
+                case "int":
+                    action.settings["value"] = str(int(action.settings["value"]) + data.ticks)
+                case "float":
+                    action.settings["value"] = str(Decimal(action.settings["value"]) + data.ticks * Decimal("0.1"))
+                case "bool":
+                    # Flipping booleans only happens if the tick is odd
+                    if (data.ticks % 2) == 0:
+                        pass
+                    action.settings["value"] = str(not str2bool(action.settings["value"]))
+                case _:
+                    logging.warning("Encoders can only operate on numeric values")
+        except Exception:
+            pass
+
+        new_settings = {
+            "event": "setSettings",
+            "context": action.context,
+            "payload": action.settings
+        }
+        sd_socket.send(json.dumps(new_settings))
+
+        set_dial_feedback(action.context)
+
+        if data.pressed:
+            sent = u_socket.send(action.get_action_name(), action.context, action.settings, action.state)
+            if not sent:
+                show_alert(data.context)
+
+    # Undefined default event
     def event_default():
         pass
 
     # Map events to function blocks
     {
+        "deviceDidConnect": device_did_connect,
         "willAppear": will_appear,
         "willDisappear": will_disappear,
         "didReceiveSettings": did_receive_settings,
         "keyDown": key_down,
-        "keyUp": key_up
+        "dialDown": key_down,
+        "touchTap": key_down,
+        "keyUp": key_up,
+        "dialUp": key_up,
+        "dialRotate": dial_rotate
     }.get(data.event, event_default)()
 
 
@@ -98,7 +160,7 @@ def on_error(ws, error):
 
 
 def on_close(ws):
-    logging.info("### closed ###")
+    logging.info("### Closed StreamDeck Socket ###")
 
 
 def on_open(ws):
@@ -129,6 +191,7 @@ def create_unity_socket():
                                                                data.payload["image"])
     u_socket.on_set_state = lambda data: set_state(data.context,
                                                    data.payload["state"])
+    u_socket.on_get_devices = lambda data: get_devices()
     u_socket.start()
 
 
@@ -185,13 +248,11 @@ def set_image_by_settings(group_id, member_id, image):
 
 def get_action_context_by_settings(group_id, member_id):
     for key, value in actions.items():
-        if value.settings.get("id") != member_id:
-            continue
-
-        if value.settings.get("group-id") != group_id:
-            continue
-
-        return key
+        action_id = value.settings.get("id")
+        if (action_id == member_id) or (action_id == None and not member_id):
+            action_group = value.settings.get("group-id")
+            if (action_group == group_id) or (action_group == None and not group_id):
+                return key
 
 
 def get_actions_context_by_class(class_type):
@@ -223,6 +284,24 @@ def set_state(context, state):
     sd_socket.send(json.dumps(data))
     actions[context].set_state(state)
 
+# Get list of connected devices
+def get_devices():
+    u_socket.send('connected-devices', None, devices)
+
+def set_dial_feedback(context):
+    action = actions[context]
+
+    try:
+        feedback = {
+            "event": "setFeedback",
+            "context": action.context,
+            "payload": {
+                "value": action.settings["value"]
+            }
+        }
+        sd_socket.send(json.dumps(feedback))
+    except Exception:
+        pass
 
 # Show alert icon on the key
 def show_alert(context):
@@ -236,11 +315,15 @@ def show_alert(context):
 
     sd_socket.send(json.dumps(data))
 
+def str2bool(v):
+    return v.lower() in ("yes", "true", "t", "1")
+
 
 if __name__ == "__main__":
     logging.info("### Start ###")
 
     BASE_PLUGIN_NAME = "com.adamcarballo.unity-integration"
+    devices = {}
     actions = {}
     sd_socket = None
     u_socket = None

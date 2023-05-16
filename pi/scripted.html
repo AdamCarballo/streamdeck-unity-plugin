@@ -7,26 +7,15 @@
         <script src="js/main.js"></script>
         <script src="js/toggleHide.js"></script>
         <title>com.adamcarballo.unity-integration</title>
-        <meta name="help" content="set-action" />
+        <meta name="help" content="scripted-action" />
     </head>
     <body>
         <!-- Property Inspector -->
         <div class="sdpi-wrapper" id="pi">
-            <!-- Group toggle, ID + info -->
-            <div data-include="templates/groupToggle.html"></div>
             <!-- Field / Property ID -->
             <div data-include="templates/idField.html"></div>
-            <!-- Type -->
-            <div class="sdpi-item" type="checkbox">
-                <div class="sdpi-item-label">Type</div>
-                <div data-include="templates/typeDropdown.html"></div>
-            </div>
-            <!-- Value -->
-            <div data-include="templates/valueField.html"></div>
             <!-- Help Button -->
             <div data-include="templates/helpButton.html"></div>
         </div>
     </body>
-
-    <script>updateToggleDelayed('group', 'group-id');</script>
 </html>

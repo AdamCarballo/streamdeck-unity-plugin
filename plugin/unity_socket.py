@@ -16,6 +16,7 @@ class UnityWebSocket:
 		self.on_set_title = self.event_default
 		self.on_set_image = self.event_default
 		self.on_set_state = self.event_default
+		self.on_get_devices = self.event_default
 
 	def start(self):
 		self.server.run_forever()
@@ -32,7 +33,8 @@ class UnityWebSocket:
 			"playModeStateChanged": self.on_play_mode_state_changed,
 			"pauseModeStateChanged": self.on_pause_mode_state_changed,
 			"setTitle": self.on_set_title,
-			"setImage": self.on_set_image
+			"setImage": self.on_set_image,
+			"getDevices": self.on_get_devices
 		}.get(data.event, self.event_default)(data)
 
 	def send(self, action, context=None, settings=None, state=0):

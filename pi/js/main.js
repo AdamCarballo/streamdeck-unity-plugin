@@ -110,8 +110,13 @@ function setSettings() {
 }
 
 function openHelp() {
+    let url = document.querySelector('meta[name="help"]')?.content
+    if (!url) {
+        url = "plugin"
+    }
+
     window.xtWindow = window.open(
-        "https://docs.f10.dev/streamdeckintegration/",
+        `https://docs.f10.dev/streamdeckintegration/manual/${url}.html`,
         "Plugin Help"
     );
 }

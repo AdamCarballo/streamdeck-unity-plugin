@@ -22,26 +22,20 @@ class Action:
 	def on_key_up(self, state):
 		self.state = state
 
+	def on_dial_rotate(self, ticks):
+		self.state = ticks
 
-# endregion
 
-# region Invoke Method
 class InvokeMethodAction(Action):
 	def get_action_name(self):
 		return "invoke-method"
 
 
-# endregion
-
-# region Set Field Property
 class SetFieldPropertyAction(Action):
 	def get_action_name(self):
 		return "set-field-property"
 
 
-# endregion
-
-# region Play Mode
 class PlayModeAction(Action):
 	def get_action_name(self):
 		return "play-mode"
@@ -55,9 +49,6 @@ class PlayModeAction(Action):
 		self.state_changed = True
 
 
-# endregion
-
-# region Pause Mode
 class PauseModeAction(Action):
 	def get_action_name(self):
 		return "pause-mode"
@@ -71,12 +62,11 @@ class PauseModeAction(Action):
 		self.state_changed = True
 
 
-# endregion
-
-# region Set Field Property
-class ExecuteMenu(Action):
+class ExecuteMenuAction(Action):
 	def get_action_name(self):
 		return "execute-menu"
 
 
-# endregion
+class ScriptedAction(Action):
+	def get_action_name(self):
+		return "scripted"

@@ -55,6 +55,18 @@
         }
       ],
       "Tooltip": "",
+      "Controllers": [
+        "Keypad",
+        "Encoder"
+      ],
+      "Encoder": {
+        "layout": "$A1",
+        "TriggerDescription": {
+          "Rotate": "Update Parameter",
+          "Push": "Trigger Action",
+          "Touch": "Trigger Action"
+        }
+      },
       "PropertyInspectorPath": "pi/invokeMethod.html",
       "UUID": "com.adamcarballo.unity-integration.invoke-method"
     },
@@ -67,8 +79,44 @@
         }
       ],
       "Tooltip": "",
+      "Controllers": [
+        "Keypad",
+        "Encoder"
+      ],
+      "Encoder": {
+        "layout": "$A1",
+        "TriggerDescription": {
+          "Rotate": "Update Value",
+          "Push": "Trigger Action",
+          "Touch": "Trigger Action"
+        }
+      },
       "PropertyInspectorPath": "pi/setFieldProperty.html",
       "UUID": "com.adamcarballo.unity-integration.set-field-property"
+    },
+    {
+      "Icon": "plugin/images/actions/scripted",
+      "Name": "Scripted",
+      "States": [
+        {
+          "Image": "plugin/images/icons/scripted"
+        }
+      ],
+      "Tooltip": "",
+      "Controllers": [
+        "Keypad"
+      ],
+      "Encoder": {
+        "layout": "$A1",
+        "TriggerDescription": {
+          "Rotate": "Custom Action",
+          "Push": "Custom Action",
+          "Touch": "Custom Action",
+          "LongTouch": "Custom Action"
+        }
+      },
+      "PropertyInspectorPath": "pi/scripted.html",
+      "UUID": "com.adamcarballo.unity-integration.scripted"
     }
   ],
   "SDKVersion": 2,
@@ -77,13 +125,13 @@
   "CodePathWin": "plugin/dist/StreamDeckUnity.exe",
   "Description": "Interact, invoke, execute and control any Unity Editor or Unity built projects using your Stream Deck.",
   "Name": "Unity Integration",
-  "Icon": "plugin/images/actions/plugin",
+  "Icon": "plugin/images/plugin",
   "Category": "Unity",
-  "CategoryIcon": "plugin/images/actions/category",
+  "CategoryIcon": "plugin/images/category",
   "PropertyInspectorPath": "pi/index.html",
   "URL": "https://f10.dev",
-  "Version": "1.1.0",
-  "DefaultWindowSize": [500, 650],
+  "Version": "1.2.0",
+  "DefaultWindowSize": [760, 650],
   "OS": [
     {
         "Platform": "mac",

@@ -1,3 +1,6 @@
+# Python Enviroment
+.env/
+
 # PyInstall build
 *dist/
 *build/
