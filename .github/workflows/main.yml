@@ -83,7 +83,7 @@ jobs:
           requirements: requirements-osx.txt
 
       - name: Run PyInstaller
-        run: python -m PyInstaller -F plugin/main.spec
+        run: python -m PyInstaller plugin/main.spec
 
       # Artifact handeling
       - name: Upload artifact

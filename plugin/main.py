@@ -3,7 +3,7 @@ import os
 # Setup logging
 import logging
 if os.environ.get("SDI_DEBUG", False):
-    logging.basicConfig(filename="main.log", filemode="w", level=logging.DEBUG)
+    logging.basicConfig(filename="sdi_debug.log", filemode="w", level=logging.DEBUG)
 
 import sys
 import websocket

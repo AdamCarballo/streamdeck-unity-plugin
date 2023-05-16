@@ -1,2 +1,2 @@
-pyinstaller>=4.0
+pyinstaller==5.11.0
 websocket-client==0.57.0
