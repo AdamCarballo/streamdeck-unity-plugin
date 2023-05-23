@@ -131,7 +131,7 @@ def on_message(ws, message):
 
         set_dial_feedback(action.context)
 
-        if data.pressed:
+        if data.pressed or action.settings["dial"]:
             sent = u_socket.send(action.get_action_name(), action.context, action.settings, action.state)
             if not sent:
                 show_alert(data.context)
