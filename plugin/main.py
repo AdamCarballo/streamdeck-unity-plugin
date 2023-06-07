@@ -9,11 +9,11 @@ import sys
 import websocket
 import json
 import unity_socket
-from decimal import *
 from threading import Thread
 from event_data import EventData
 from actions import InvokeMethodAction, SetFieldPropertyAction, \
-        PlayModeAction, PauseModeAction, ExecuteMenuAction, ScriptedAction
+        PlayModeAction, PauseModeAction, ExecuteMenuAction, \
+        ScriptedAction, DialInvokeAction
 
 
 # Open the web socket to Stream Deck
@@ -51,6 +51,7 @@ def on_message(ws, message):
             get_action_name("play-mode"): PlayModeAction,
             get_action_name("pause-mode"): PauseModeAction,
             get_action_name("execute-menu"): ExecuteMenuAction,
+            get_action_name("dial-invoke"): DialInvokeAction,
             get_action_name("scripted"): ScriptedAction
         }
 
@@ -106,22 +107,6 @@ def on_message(ws, message):
         action = actions[data.context]
         action.on_dial_rotate(data.ticks)
 
-        try:
-            match action.settings["type"]:
-                case "int":
-                    action.settings["value"] = str(int(action.settings["value"]) + data.ticks)
-                case "float":
-                    action.settings["value"] = str(Decimal(action.settings["value"]) + data.ticks * Decimal("0.1"))
-                case "bool":
-                    # Flipping booleans only happens if the tick is odd
-                    if (data.ticks % 2) == 0:
-                        pass
-                    action.settings["value"] = str(not str2bool(action.settings["value"]))
-                case _:
-                    logging.warning("Encoders can only operate on numeric values")
-        except Exception:
-            pass
-
         new_settings = {
             "event": "setSettings",
             "context": action.context,
@@ -131,7 +116,7 @@ def on_message(ws, message):
 
         set_dial_feedback(action.context)
 
-        if data.pressed or action.settings["dial"]:
+        if data.pressed or action.settings.get("dial", False):
             sent = u_socket.send(action.get_action_name(), action.context, action.settings, action.state)
             if not sent:
                 show_alert(data.context)
@@ -189,6 +174,9 @@ def create_unity_socket():
     u_socket.on_set_image = lambda data: set_image_by_settings(data.payload["group-id"],
                                                                data.payload["id"],
                                                                data.payload["image"])
+    u_socket.on_set_value = lambda data: set_value_by_settings(data.payload["group-id"],
+                                                               data.payload["id"],
+                                                               data.payload["value"])
     u_socket.on_set_state = lambda data: set_state(data.context,
                                                    data.payload["state"])
     u_socket.on_get_devices = lambda data: get_devices()
@@ -244,6 +232,33 @@ def set_image_by_settings(group_id, member_id, image):
 
     logging.info("Changing image from context %s to %s" % (context, image))
     sd_socket.send(json.dumps(data))
+
+
+def set_value_by_settings(group_id, member_id, value):
+    if sd_socket is None:
+        return
+
+    context = get_action_context_by_settings(group_id, member_id)
+    if context is None:
+        return
+
+    action = actions[context]
+
+    try:
+        action.settings["value"] = value
+    except Exception:
+        pass
+
+    new_settings = {
+        "event": "setSettings",
+        "context": action.context,
+        "payload": action.settings
+    }
+
+    logging.info("Changing value from context %s to %s" % (context, value))
+    sd_socket.send(json.dumps(new_settings))
+
+    set_dial_feedback(action.context)
 
 
 def get_action_context_by_settings(group_id, member_id):

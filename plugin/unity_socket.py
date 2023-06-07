@@ -15,6 +15,7 @@ class UnityWebSocket:
 		self.on_pause_mode_state_changed = self.event_default
 		self.on_set_title = self.event_default
 		self.on_set_image = self.event_default
+		self.on_set_value = self.event_default
 		self.on_set_state = self.event_default
 		self.on_get_devices = self.event_default
 
@@ -34,6 +35,7 @@ class UnityWebSocket:
 			"pauseModeStateChanged": self.on_pause_mode_state_changed,
 			"setTitle": self.on_set_title,
 			"setImage": self.on_set_image,
+			"setValue": self.on_set_value,
 			"getDevices": self.on_get_devices
 		}.get(data.event, self.event_default)(data)
 

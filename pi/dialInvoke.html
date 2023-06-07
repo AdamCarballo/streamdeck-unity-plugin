@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Import style sheets -->
+        <link rel="stylesheet" type="text/css" href="css/sdpi.css">
+        <!-- Import scripts -->
+        <script src="js/main.js"></script>
+        <script src="js/toggleHide.js"></script>
+        <title>com.adamcarballo.unity-integration</title>
+        <meta name="help" content="invoke-action" />
+    </head>
+    <body>
+        <!-- Property Inspector -->
+        <div class="sdpi-wrapper" id="pi">
+            <!-- Method ID -->
+            <div data-include="templates/idField.html"></div>
+            <!-- Dial Increment Steps -->
+            <div data-include="templates/dialIncrementField.html"></div>
+            <!-- Param Value -->
+            <div class="sdpi-item" type="field">
+                <div class="sdpi-item-label">Value</div>
+                <input class="sdpi-item-value" id="value" value="" placeholder="Starting value required" type="number" required>
+            </div>
+            <!-- Dial Settings (hidden) -->
+            <div hidden>
+                <div data-include="templates/dialToggle.html"></div>
+            </div>
+            <!-- Help Button -->
+            <div data-include="templates/helpButton.html"></div>
+        </div>
+    </body>
+
+    <script>updateToggleDelayed('group', 'group-id');</script>
+    <script>updateToggleDelayed('param', 'value');updateToggleDelayed('param', 'type', false)</script>
+</html>

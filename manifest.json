@@ -62,7 +62,7 @@
       "Encoder": {
         "layout": "$A1",
         "TriggerDescription": {
-          "Rotate": "Update Parameter",
+          "Rotate": "Update Value",
           "Push": "Trigger Action",
           "Touch": "Trigger Action"
         }
@@ -93,6 +93,29 @@
       },
       "PropertyInspectorPath": "pi/setFieldProperty.html",
       "UUID": "com.adamcarballo.unity-integration.set-field-property"
+    },
+    {
+      "Icon": "plugin/images/actions/invoke",
+      "Name": "Dial Invoke",
+      "States": [
+        {
+          "Image": "plugin/images/icons/invoke"
+        }
+      ],
+      "Tooltip": "",
+      "Controllers": [
+        "Encoder"
+      ],
+      "Encoder": {
+        "layout": "$A1",
+        "TriggerDescription": {
+          "Rotate": "Update Value",
+          "Push": "Toggle State",
+          "Touch": "Toggle State"
+        }
+      },
+      "PropertyInspectorPath": "pi/dialInvoke.html",
+      "UUID": "com.adamcarballo.unity-integration.dial-invoke"
     },
     {
       "Icon": "plugin/images/actions/scripted",
