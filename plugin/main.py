@@ -171,12 +171,26 @@ def create_unity_socket():
     u_socket.on_set_title = lambda data: set_title_by_settings(data.payload["group-id"],
                                                                data.payload["id"],
                                                                data.payload["title"])
+    u_socket.on_set_dial_title = lambda data: set_dial_title_by_settings(data.payload["id"],
+                                                               data.payload["title"])
     u_socket.on_set_image = lambda data: set_image_by_settings(data.payload["group-id"],
                                                                data.payload["id"],
                                                                data.payload["image"])
+    u_socket.on_set_feedback = lambda data: set_feedback_by_settings(data.payload["id"],
+                                                                     data.payload["title"],
+                                                                     data.payload["icon"],
+                                                                     data.payload["value"],
+                                                                     data.payload["indicator"])
+    u_socket.on_set_feedback_layout = lambda data: set_feedback_layout_by_settings(
+                                                                    data.payload["id"],
+                                                                    data.payload["layout"])
     u_socket.on_set_value = lambda data: set_value_by_settings(data.payload["group-id"],
                                                                data.payload["id"],
                                                                data.payload["value"])
+    u_socket.on_set_dial_value = lambda data: set_dial_value_by_settings(data.payload["id"],
+                                                               data.payload["value"])
+    u_socket.on_set_dial_icon = lambda data: set_dial_icon_by_settings(data.payload["id"],
+                                                               data.payload["icon"])
     u_socket.on_set_state = lambda data: set_state(data.context,
                                                    data.payload["state"])
     u_socket.on_get_devices = lambda data: get_devices()
@@ -213,6 +227,89 @@ def set_title_by_settings(group_id, member_id, title):
     logging.info("Changing title from context %s to %s" % (context, title))
     sd_socket.send(json.dumps(data))
 
+def set_dial_title_by_settings(member_id, title):
+    if sd_socket is None:
+        return
+
+    context = get_action_context_by_settings(None, member_id)
+    if context is None:
+        return
+
+    data = {
+        "event": "setFeedback",
+        "context": context,
+        "payload": {
+            "title": title
+        }
+    }
+
+    logging.info("Changing title from context %s to %s" % (context, title))
+    sd_socket.send(json.dumps(data))
+
+def set_dial_value_by_settings(member_id, value):
+    if sd_socket is None:
+        return
+
+    context = get_action_context_by_settings(None, member_id)
+    if context is None:
+        return
+
+    action = actions[context]
+
+    try:
+        action.settings["value"] = value
+    except Exception:
+        pass
+
+    new_settings = {
+        "event": "setSettings",
+        "context": action.context,
+        "payload": action.settings
+    }
+
+    logging.info("Changing value from context %s to %s" % (context, value))
+    sd_socket.send(json.dumps(new_settings))
+
+    set_dial_feedback(action.context)
+
+def set_dial_icon_by_settings(member_id, icon):
+    if sd_socket is None:
+        return
+
+    context = get_action_context_by_settings(None, member_id)
+    if context is None:
+        return
+
+    data = {
+        "event": "setFeedback",
+        "context": context,
+        "payload": {
+            "icon": icon
+        }
+    }
+
+    logging.info("Changing icon from context %s to %s" % (context, icon))
+    sd_socket.send(json.dumps(data))
+
+def set_feedback_layout_by_settings(member_id, layout):
+    if sd_socket is None:
+        return
+
+    context = get_action_context_by_settings(None, member_id)
+    if context is None:
+        return
+
+    data = {
+        "event": "setFeedbackLayout",
+        "context": context,
+        "payload": {
+            "layout": layout
+        }
+    }
+
+    logging.info("Changing layout from context %s to %s" % (context, layout))
+    sd_socket.send(json.dumps(data))
+
 
 def set_image_by_settings(group_id, member_id, image):
     if sd_socket is None:
@@ -231,6 +328,28 @@ def set_image_by_settings(group_id, member_id, image):
     }
 
     logging.info("Changing image from context %s to %s" % (context, image))
+    sd_socket.send(json.dumps(data))
+
+def set_feedback_by_settings(member_id, title, icon, value, indicator):
+    if sd_socket is None:
+        return
+
+    context = get_action_context_by_settings(group_id=None, member_id=member_id)
+    if context is None:
+        return
+
+    data = {
+        "event": "setFeedback",
+        "context": context,
+        "payload": {
+            "title": title,
+            "icon":icon,
+            "value":value,
+            "indicator":indicator
+        }
+    }
+
+    logging.info("Changing image ")
     sd_socket.send(json.dumps(data))
 
 
@@ -302,6 +421,7 @@ def set_state(context, state):
 # Get list of connected devices
 def get_devices():
     u_socket.send('connected-devices', None, devices)
+
 
 def set_dial_feedback(context):
     action = actions[context]
