@@ -121,6 +121,15 @@ function openHelp() {
     );
 }
 
+function filterChars(event) {
+    const forbiddenChars = ['"'];
+    let keyPressed = String.fromCharCode(event.keyCode || event.which);
+
+    if (forbiddenChars.includes(keyPressed)) {
+        event.preventDefault();
+    }
+}
+
 // https://github.com/LexmarkWeb/csi.js under MIT
 window.onload = function() {
 	var elements = document.getElementsByTagName('*'),
