@@ -16,7 +16,12 @@ class UnityWebSocket:
 		self.on_set_title = self.event_default
 		self.on_set_image = self.event_default
 		self.on_set_value = self.event_default
+		self.on_set_dial_value = self.event_default
+		self.on_set_dial_icon = self.event_default
 		self.on_set_state = self.event_default
+		self.on_set_dial_title = self.event_default
+		self.on_set_feedback = self.event_default
+		self.on_set_feedback_layout = self.event_default
 		self.on_get_devices = self.event_default
 
 	def start(self):
@@ -34,8 +39,13 @@ class UnityWebSocket:
 			"playModeStateChanged": self.on_play_mode_state_changed,
 			"pauseModeStateChanged": self.on_pause_mode_state_changed,
 			"setTitle": self.on_set_title,
+			"setDialTitle": self.on_set_dial_title,
 			"setImage": self.on_set_image,
+			"setFeedback":self.on_set_feedback,
+			"setFeedbackLayout":self.on_set_feedback_layout,
 			"setValue": self.on_set_value,
+			"setDialValue": self.on_set_dial_value,
+			"setDialIcon": self.on_set_dial_icon,
 			"getDevices": self.on_get_devices
 		}.get(data.event, self.event_default)(data)
 
