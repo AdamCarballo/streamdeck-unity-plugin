@@ -14,7 +14,7 @@ jobs:
         run: echo ${GITHUB_REF#refs/tags/} > tags.txt
 
       - name: Upload tags
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: github-tags
           path: tags.txt
@@ -24,11 +24,11 @@ jobs:
 
     steps:
       # Checking-out repository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
 
       # Build python
       - name: Setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
           architecture: x64
@@ -57,7 +57,7 @@ jobs:
 
       # Artifact handeling
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: windows-plugin
           path: main.dist\*
@@ -67,11 +67,11 @@ jobs:
 
     steps:
       # Checking-outrepository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
 
       # Build python
       - name: Setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
           architecture: x64
@@ -87,7 +87,7 @@ jobs:
 
       # Artifact handeling
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: macos-plugin
           path: dist/StreamDeckUnity
@@ -98,7 +98,7 @@ jobs:
 
     steps:
       # Checking-outrepository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
 
       - name: Prepare directory files
         run: |
@@ -113,18 +113,18 @@ jobs:
 
       # Artifact handeling
       - name: Download tags
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: github-tags
 
       - name: Download Windows artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: windows-plugin
           path: com.adamcarballo.unity-integration.sdPlugin\plugin\dist
 
       - name: Download MacOS artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: macos-plugin
           path: com.adamcarballo.unity-integration.sdPlugin\plugin\dist
@@ -152,7 +152,7 @@ jobs:
           prerelease: false
 
       - name: Upload draft release
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
