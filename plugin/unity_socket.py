@@ -39,12 +39,13 @@ class UnityWebSocket:
 			"getDevices": self.on_get_devices
 		}.get(data.event, self.event_default)(data)
 
-	def send(self, action, context=None, settings=None, state=0):
+	def send(self, action, event=None, context=None, settings=None, state=0):
 		if len(self.server.clients) == 0:
 			return False
 
 		data = {
 			"action": action,
+			"event": event,
 			"context": context,
 			"settings": settings,
 			"state": state

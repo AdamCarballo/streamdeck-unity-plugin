@@ -23,7 +23,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # Checking-outrepository under $GITHUB_WORKSPACE
+      # Checking-out repository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
 
       # Build python

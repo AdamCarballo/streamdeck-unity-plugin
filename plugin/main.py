@@ -81,7 +81,7 @@ def on_message(ws, message):
             action = actions[data.context]
             action.on_key_down(data.state)
 
-            sent = u_socket.send(action.get_action_name(), action.context, action.settings, action.state)
+            sent = u_socket.send(action.get_action_name(), data.event, action.context, action.settings, action.state)
             if not sent:
                 show_alert(data.context)
 
@@ -95,6 +95,11 @@ def on_message(ws, message):
             if action.state_changed:
                 # setTimeout(function(){ Utils.setState(self.context, self.state); }, 4000);
                 set_state(action.context, action.state)
+
+            # 1.3+ Also send events on keyUp, ignored by default unless Unity target is listening for them
+            sent = u_socket.send(action.get_action_name(), data.event, action.context, action.settings, action.state)
+            if not sent:
+                show_alert(data.context)
 
     # Send onDialRotate event to actions
     def dial_rotate():
@@ -117,7 +122,7 @@ def on_message(ws, message):
         set_dial_feedback(action.context)
 
         if data.pressed or action.settings.get("dial", False):
-            sent = u_socket.send(action.get_action_name(), action.context, action.settings, action.state)
+            sent = u_socket.send(action.get_action_name(), data.event, action.context, action.settings, action.state)
             if not sent:
                 show_alert(data.context)
 
@@ -164,21 +169,12 @@ def on_open(ws):
 def create_unity_socket():
     global u_socket
     u_socket = unity_socket.UnityWebSocket(UNITY_PORT)
-    u_socket.on_play_mode_state_changed = lambda data: set_state_all_actions(PlayModeAction,
-                                                                             data.payload["state"])
-    u_socket.on_pause_mode_state_changed = lambda data: set_state_all_actions(PauseModeAction,
-                                                                              data.payload["state"])
-    u_socket.on_set_title = lambda data: set_title_by_settings(data.payload["group-id"],
-                                                               data.payload["id"],
-                                                               data.payload["title"])
-    u_socket.on_set_image = lambda data: set_image_by_settings(data.payload["group-id"],
-                                                               data.payload["id"],
-                                                               data.payload["image"])
-    u_socket.on_set_value = lambda data: set_value_by_settings(data.payload["group-id"],
-                                                               data.payload["id"],
-                                                               data.payload["value"])
-    u_socket.on_set_state = lambda data: set_state(data.context,
-                                                   data.payload["state"])
+    u_socket.on_play_mode_state_changed = lambda data: set_state_all_actions(PlayModeAction, data.payload["state"])
+    u_socket.on_pause_mode_state_changed = lambda data: set_state_all_actions(PauseModeAction, data.payload["state"])
+    u_socket.on_set_title = lambda data: set_title_by_settings(data.payload["group-id"], data.payload["id"], data.payload["title"])
+    u_socket.on_set_image = lambda data: set_image_by_settings(data.payload["group-id"], data.payload["id"], data.payload["image"])
+    u_socket.on_set_value = lambda data: set_value_by_settings(data.payload["group-id"], data.payload["id"], data.payload["value"])
+    u_socket.on_set_state = lambda data: set_state(data.context, data.payload["state"])
     u_socket.on_get_devices = lambda data: get_devices()
     u_socket.start()
 
@@ -301,7 +297,8 @@ def set_state(context, state):
 
 # Get list of connected devices
 def get_devices():
-    u_socket.send('connected-devices', None, devices)
+    logging.info(f'Devices: {devices}')
+    u_socket.send('connected-devices', None, None, devices)
 
 def set_dial_feedback(context):
     action = actions[context]
